@@ -1,1 +1,0 @@
-CREATE INDEX `idx_obituaries_publication` ON `obituaries` (`published`,`published_at`);
