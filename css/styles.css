@@ -12,12 +12,8 @@ img{max-width:100%}
 .topbar p{margin:0}
 .topbar a{color:var(--gold-light)}
 .site-header{height:92px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(74,13,28,.99);color:white;position:relative;z-index:20;border-bottom:1px solid rgba(255,255,255,.1)}
-.brand{display:flex;align-items:center;gap:13px;min-width:200px}
-.brand-mark{width:42px;height:42px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font:italic 23px 'Playfair Display',serif;color:var(--gold-light);position:relative}
-.brand-mark:after{content:'';position:absolute;inset:4px;border:1px solid rgba(197,161,90,.28);border-radius:50%}
-.brand strong,.brand small{display:block}
-.brand strong{letter-spacing:.25em;font-size:14px}
-.brand small{color:#d8c7ca;letter-spacing:.18em;font-size:7px;margin-top:5px}
+.brand{display:flex;align-items:center;min-width:200px}
+.brand-logo{height:48px;width:auto;display:block}
 .desktop-nav{display:flex;gap:2.1vw;align-items:center}
 .desktop-nav a{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#e2d6d8;padding:37px 0 34px;border-bottom:3px solid transparent;transition:.2s}
 .desktop-nav a:hover,.desktop-nav a.active{color:var(--gold-light);border-color:var(--gold)}
