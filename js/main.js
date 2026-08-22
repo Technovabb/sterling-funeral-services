@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Preferred contact: " + (data.get("preference") || ""),
         "How can you help: " + (data.get("message") || ""),
       ].join("\n");
-      window.open("https://wa.me/12465717965?text=" + encodeURIComponent(message), "_blank", "noopener,noreferrer");
+      window.open("https://wa.me/12462349195?text=" + encodeURIComponent(message), "_blank", "noopener,noreferrer");
     });
   }
 });
