@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var caskets = cards.map(function (card) {
       var img = card.querySelector(".casket-image img");
       return {
-        src: img.getAttribute("src"),
+        images: card.getAttribute("data-images").split("|"),
         alt: img.getAttribute("alt"),
         name: card.querySelector("h3").textContent,
         detail: card.querySelector(".casket-info p").textContent,
@@ -58,14 +58,31 @@ document.addEventListener("DOMContentLoaded", function () {
     var lbName = lightbox.querySelector(".lightbox-name");
     var lbDetail = lightbox.querySelector(".lightbox-detail");
     var lbWa = lightbox.querySelector(".lightbox-wa");
+    var lbPrev = lightbox.querySelector(".lightbox-prev");
+    var lbNext = lightbox.querySelector(".lightbox-next");
+    var lbCounter = lightbox.querySelector(".lightbox-counter");
+    var currentCasket = 0;
+    var currentPhoto = 0;
+
+    function showPhoto() {
+      var c = caskets[currentCasket];
+      lbImg.setAttribute("src", c.images[currentPhoto]);
+      lbImg.setAttribute("alt", c.alt);
+      var multi = c.images.length > 1;
+      lbPrev.style.display = multi ? "" : "none";
+      lbNext.style.display = multi ? "" : "none";
+      lbCounter.style.display = multi ? "" : "none";
+      if (multi) lbCounter.textContent = (currentPhoto + 1) + " / " + c.images.length;
+    }
 
     function openLightbox(index) {
-      var c = caskets[index];
-      lbImg.setAttribute("src", c.src);
-      lbImg.setAttribute("alt", c.alt);
+      currentCasket = index;
+      currentPhoto = 0;
+      var c = caskets[currentCasket];
       lbName.textContent = c.name;
       lbDetail.textContent = c.detail;
       lbWa.setAttribute("href", c.wa);
+      showPhoto();
       lightbox.classList.add("open");
       lightbox.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
@@ -75,6 +92,18 @@ document.addEventListener("DOMContentLoaded", function () {
       lightbox.classList.remove("open");
       lightbox.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
+    }
+
+    function prevPhoto() {
+      var c = caskets[currentCasket];
+      currentPhoto = (currentPhoto - 1 + c.images.length) % c.images.length;
+      showPhoto();
+    }
+
+    function nextPhoto() {
+      var c = caskets[currentCasket];
+      currentPhoto = (currentPhoto + 1) % c.images.length;
+      showPhoto();
     }
 
     cards.forEach(function (card, index) {
@@ -95,10 +124,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     lightbox.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
     lightbox.querySelector(".lightbox-backdrop").addEventListener("click", closeLightbox);
+    lbPrev.addEventListener("click", prevPhoto);
+    lbNext.addEventListener("click", nextPhoto);
 
     document.addEventListener("keydown", function (event) {
       if (!lightbox.classList.contains("open")) return;
       if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowLeft") prevPhoto();
+      if (event.key === "ArrowRight") nextPhoto();
     });
   }
 });
