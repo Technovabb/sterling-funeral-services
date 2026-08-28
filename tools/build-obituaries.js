@@ -46,8 +46,12 @@ function initials(name) {
     .join("");
 }
 
-function hasPhoto(slug) {
-  return fs.existsSync(path.join(root, "images/obituaries", slug + ".jpg"));
+// Portraits keep whatever format they arrived in, so try each in turn.
+function photoFor(slug) {
+  for (const ext of [".jpg", ".png", ".webp"]) {
+    if (fs.existsSync(path.join(root, "images/obituaries", slug + ext))) return slug + ext;
+  }
+  return null;
 }
 
 function sortKey(p) {
@@ -134,12 +138,12 @@ function summaryLine(p) {
 }
 
 function memorialPage(p) {
-  const photo = hasPhoto(p.slug);
+  const photo = photoFor(p.slug);
   const { first, rest } = splitName(p.name);
   const desc = `${p.name}${p.aka ? `, affectionately known as ${p.aka}` : ""} — service and interment details published by Sterling Funeral Services.`;
 
   const portrait = photo
-    ? `<div class="memorial-portrait"><img src="../images/obituaries/${p.slug}.jpg" alt="Obituary notice for ${esc(p.name)}" /></div>`
+    ? `<div class="memorial-portrait"><img src="../images/obituaries/${photo}" alt="Obituary notice for ${esc(p.name)}" /></div>`
     : `<div class="memorial-portrait is-placeholder" role="img" aria-label="Obituary notice for ${esc(p.name)} — photograph to follow"><span class="monogram">${esc(initials(p.name))}</span></div>`;
 
   const datesLine =
@@ -175,7 +179,7 @@ function memorialPage(p) {
 <link rel="stylesheet" href="../css/styles.css" />
 <meta property="og:title" content="${esc(p.name)} | Sterling Funeral Services" />
 <meta property="og:description" content="${esc(desc)}" />
-<meta property="og:image" content="../${photo ? `images/obituaries/${p.slug}.jpg` : "og.png"}" />
+<meta property="og:image" content="../${photo ? `images/obituaries/${photo}` : "og.png"}" />
 <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
@@ -226,7 +230,7 @@ function blurb(p) {
 }
 
 function card(p) {
-  const photo = hasPhoto(p.slug);
+  const photo = photoFor(p.slug);
   const href = `obituaries/${p.slug}.html`;
   const dates =
     [p.age ? `Aged ${p.age}` : null, p.diedText ? `Entered rest ${p.diedText}` : null]
@@ -234,7 +238,7 @@ function card(p) {
       .join(" &middot; ") || `Service held ${txt(p.service)}`;
 
   const image = photo
-    ? `<a class="obituary-card-image" href="${href}" aria-label="View the obituary for ${esc(p.name)}"><img src="images/obituaries/${p.slug}.jpg" alt="Obituary notice for ${esc(p.name)}" loading="lazy" /></a>`
+    ? `<a class="obituary-card-image" href="${href}" aria-label="View the obituary for ${esc(p.name)}"><img src="images/obituaries/${photo}" alt="Obituary notice for ${esc(p.name)}" loading="lazy" /></a>`
     : `<a class="obituary-card-image is-placeholder" href="${href}" aria-label="View the obituary for ${esc(p.name)}"><span class="monogram">${esc(initials(p.name))}</span></a>`;
 
   return `<article class="obituary-card">
@@ -265,7 +269,7 @@ if (!gridBlock.test(index)) throw new Error("obituary-grid block not found in ob
 // note: an unchanged result just means the index was already up to date
 fs.writeFileSync(indexPath, index.replace(gridBlock, grid + "\n</section>"));
 
-const missing = people.filter((p) => !hasPhoto(p.slug));
+const missing = people.filter((p) => !photoFor(p.slug));
 console.log(`Wrote ${written} memorial pages and rebuilt the index.`);
 console.log(`Notice photographs present: ${people.length - missing.length}/${people.length}`);
 if (missing.length) {
