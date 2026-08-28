@@ -292,3 +292,6 @@ footer{background:var(--wine-deep);color:#bfaeb1;padding:75px max(5vw,calc((100v
   .hero-service-note i{display:none}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+.obituary-card-image.is-placeholder,.memorial-portrait.is-placeholder{display:grid;place-items:center}
+.monogram{display:grid;place-items:center;width:96px;height:108px;border:1px solid var(--gold);color:var(--gold-light);font-family:'Playfair Display',Georgia,serif;font-size:38px;letter-spacing:.06em}
+.memorial-portrait.is-placeholder .monogram{width:132px;height:150px;font-size:52px}
