@@ -259,7 +259,8 @@ for (const p of people) {
 const indexPath = path.join(root, "obituaries.html");
 let index = fs.readFileSync(indexPath, "utf8");
 const grid = `<div class="obituary-grid">\n${people.map(card).join("\n")}\n</div>`;
-const gridBlock = /<div class="obituary-grid">[\s\S]*?\n<\/div>\n<\/section>/;
+// \r?\n so this still matches when git checks the file out with CRLF endings
+const gridBlock = /<div class="obituary-grid">[\s\S]*?\r?\n<\/div>\r?\n<\/section>/;
 if (!gridBlock.test(index)) throw new Error("obituary-grid block not found in obituaries.html");
 // note: an unchanged result just means the index was already up to date
 fs.writeFileSync(indexPath, index.replace(gridBlock, grid + "\n</section>"));
