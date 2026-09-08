@@ -312,6 +312,45 @@ if (missing.length) {
   console.log(`Awaiting images/obituaries/<slug>.jpg for ${missing.length}:`);
   console.log(missing.map((p) => "  " + p.slug).join("\n"));
 }
+/* ---------- sitemap ----------
+   Families search for a person by name. Without a sitemap Google has to find
+   56 obituary pages by crawling alone; with one it is told about them
+   directly. Regenerated on every build so it never goes stale. */
+const ROOT_PAGES = [
+  ["", 1.0],
+  ["obituaries.html", 0.9],
+  ["services.html", 0.8],
+  ["caskets.html", 0.8],
+  ["pre-planning.html", 0.7],
+  ["about.html", 0.7],
+  ["contact.html", 0.7],
+];
+const iso = (f) => {
+  try { return fs.statSync(path.join(root, f)).mtime.toISOString().slice(0, 10); }
+  catch (e) { return new Date().toISOString().slice(0, 10); }
+};
+const urls = [
+  ...ROOT_PAGES.map(([f, pri]) => ({ loc: `${SITE}/${f}`, mod: iso(f || "index.html"), pri })),
+  ...people.map((p) => ({
+    loc: `${SITE}/obituaries/${p.slug}.html`,
+    mod: iso(`obituaries/${p.slug}.html`),
+    pri: 0.6,
+  })),
+];
+fs.writeFileSync(
+  path.join(root, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls
+      .map((u) => `<url><loc>${u.loc}</loc><lastmod>${u.mod}</lastmod><priority>${u.pri.toFixed(1)}</priority></url>`)
+      .join("\n") +
+    `\n</urlset>\n`
+);
+fs.writeFileSync(
+  path.join(root, "robots.txt"),
+  `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`
+);
+console.log(`Sitemap: ${urls.length} URLs.`);
+
 if (dateWarnings.length) {
   console.log(`\n!! ${dateWarnings.length} date(s) do not match the calendar:`);
   dateWarnings.forEach((w) => console.log(`  ${w}`));
