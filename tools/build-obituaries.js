@@ -14,7 +14,7 @@ const path = require("path");
 
 // Absolute URLs: Facebook and WhatsApp ignore a relative og:image, so link
 // previews for shared obituaries show no photograph without this.
-const SITE = "https://sterlingfuneralservices.com";
+const SITE = "https://www.sterlingfuneralservices.com";
 
 const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));

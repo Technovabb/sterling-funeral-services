@@ -35,7 +35,7 @@ npx serve .
 
 ## Custom domain
 
-The site is served at **https://sterlingfuneralservices.com**.
+The site is served at **https://www.sterlingfuneralservices.com**.
 
 `CNAME` in the repository root is what tells GitHub Pages the domain. The DNS
 records live at Namecheap and are not managed from here — see the domain
