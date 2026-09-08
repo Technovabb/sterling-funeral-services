@@ -269,6 +269,35 @@ if (!gridBlock.test(index)) throw new Error("obituary-grid block not found in ob
 // note: an unchanged result just means the index was already up to date
 fs.writeFileSync(indexPath, index.replace(gridBlock, grid + "\n</section>"));
 
+/* Every published date carries its weekday, so the calendar can check it.
+   This catches the commonest transcription slip - right weekday, wrong day
+   number - which is exactly how four wrong dates reached the live site. */
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const DATE_RE = new RegExp(
+  `(${DAYS.join("|")}),?\\s+(${MONTH_NAMES.join("|")})\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s*(\\d{4})`
+);
+const dateWarnings = [];
+for (const p of people) {
+  for (const field of ["diedText", "service"]) {
+    const m = String(p[field] || "").match(DATE_RE);
+    if (!m) continue;
+    const actual = DAYS[new Date(Date.UTC(+m[4], MONTH_NAMES.indexOf(m[2]), +m[3])).getUTCDay()];
+    if (actual !== m[1]) {
+      dateWarnings.push(`${p.name} (${field}): "${p[field]}" — ${m[2]} ${m[3]} ${m[4]} was a ${actual}`);
+    }
+  }
+  // a service that precedes the passing is always a data error
+  if (p.died && p.service) {
+    const sm = String(p.service).match(DATE_RE);
+    if (sm) {
+      const svc = new Date(Date.UTC(+sm[4], MONTH_NAMES.indexOf(sm[2]), +sm[3]));
+      if (svc < new Date(p.died)) {
+        dateWarnings.push(`${p.name}: service ${p.service} precedes the date of passing ${p.diedText}`);
+      }
+    }
+  }
+}
+
 const missing = people.filter((p) => !photoFor(p.slug));
 console.log(`Wrote ${written} memorial pages and rebuilt the index.`);
 console.log(`Notice photographs present: ${people.length - missing.length}/${people.length}`);
@@ -276,6 +305,13 @@ if (missing.length) {
   console.log(`Awaiting images/obituaries/<slug>.jpg for ${missing.length}:`);
   console.log(missing.map((p) => "  " + p.slug).join("\n"));
 }
+if (dateWarnings.length) {
+  console.log(`\n!! ${dateWarnings.length} date(s) do not match the calendar:`);
+  dateWarnings.forEach((w) => console.log(`  ${w}`));
+} else {
+  console.log("Every weekday-bearing date agrees with the calendar.");
+}
+
 const flagged = people.filter((p) => p.flag);
 if (flagged.length) {
   console.log(`\n${flagged.length} record(s) need confirming before publishing:`);

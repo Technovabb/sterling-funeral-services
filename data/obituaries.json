@@ -60,7 +60,7 @@
    "Relative of the Holligan, Harewood, Prince, Crichlow and Mayers families."
   ],
   "source": "nation-docx",
-  "flag": "The Nation submission reads “Friday June 10th” for the service, which cannot be right — she passed on June 23rd. The hymn-sheet form gives Friday July 10th, used here."
+  "flag": "The Nation submission read “Friday June 10th” for the service - a Wednesday, and before she passed on June 23rd. Friday July 10th 2026 is correct and is what the hymn-sheet form and the Facebook notice give."
  },
  {
   "slug": "shawn-ignatius-holder",
@@ -366,7 +366,7 @@
   "born": "1943-01-31",
   "died": "2026-04-24",
   "diedText": "Friday, April 24th, 2026",
-  "service": "Monday, May 15th, 2026 at 3:00pm",
+  "service": "Friday, May 15th, 2026 at 3:00pm",
   "venue": "St. John Parish Church, The Glebe, St.John",
   "family": [
    "Beloved son of the late Olga Mascoll and Andrew Howard.",
@@ -383,7 +383,8 @@
    "Relative of the Howard, Spooner, Barrow and Howell families.",
    "Friend of Michael Moseley, Tyron Browne & Gloria Mascoll (All of the UK), Henderson Jordan, Emerson Alleyne, The Oistins Domino Crew and the late Maxine Huddlestone (UK)."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "flag": "The hymn-sheet form recorded the weekday as Monday; May 15th 2026 was a Friday, which is what the Nation submission says."
  },
  {
   "slug": "reynold-gilbert-dublin",
@@ -499,7 +500,7 @@
   "born": "1946-11-30",
   "died": "2026-03-30",
   "diedText": "Monday, March 30th, 2026",
-  "service": "Thursday, April 24th, 2026 at 10am",
+  "service": "Thursday, April 23rd, 2026 at 10am",
   "venue": "Unity Wesleyan Holiness Church, Edgecliff, St. John",
   "family": [
    "Dear son of the late Gordon and Millicent Shepherd.",
@@ -511,7 +512,8 @@
    "Relative of the Harris, Shepherd and Denny families.",
    "Friend of many."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "flag": "The Nation submission read “Thursday April 24th, 2026”, but April 24th was a Friday. Both sources say Thursday and the Facebook notice gives the 23rd, so Thursday April 23rd is used. Worth confirming with the family."
  },
  {
   "slug": "maxine-adina-layne",
@@ -896,7 +898,7 @@
   "born": "1947-01-13",
   "died": "2025-12-01",
   "diedText": "Monday, December 1st, 2025",
-  "service": "Monday, November 15th, 2025 at 1:00PM",
+  "service": "Monday, December 15th, 2025 at 1:00pm",
   "venue": "New Testament Church of God, Fitts Village St. James",
   "family": [
    "Treasured husband of the late Mary Best.",
@@ -909,7 +911,8 @@
    "Dear friend of Cyrlene Odle, Ileen Richards (Vitrose), Gwenneth Haynes, Daphne Jemmott and many others.",
    "Relative of the Best and Doughlin families of Orange Hill, St. James."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "flag": "The hymn-sheet form recorded the service as November 15th, which was a Saturday and two weeks before he passed. Corrected to Monday December 15th per the Nation submission."
  },
  {
   "slug": "jaden-rolander-gibson",
@@ -980,8 +983,8 @@
   "age": 96,
   "address": "Lot 25 St. Marys Ave, Holders Terrace, St. James, formerly of School Road, Carrington’s Village, St. Michael",
   "born": "1929-02-20",
-  "died": "2025-11-08",
-  "diedText": "Friday, November 8th, 2025",
+  "died": "2025-11-07",
+  "diedText": "Friday, November 7th, 2025",
   "service": "Thursday, November 20th, 2025 at 2:00PM",
   "venue": "The Church of St. John the Baptist, Holders Hill, St. James",
   "family": [
@@ -996,7 +999,7 @@
    "Dear friend of Mrs. Husbands, Mrs. Bailey, Mr & Mrs. Brown, Mr & Mrs. Stuart, Ms.Lin Belgrave, Ms. Merlene Bowen and Marietta."
   ],
   "source": "nation-docx",
-  "flag": "The Nation submission gives the date of passing as Friday November 8th, 2025; the hymn-sheet form gives November 7th. Confirm which is correct."
+  "flag": "The Nation submission read “Friday November 8th, 2025”, but November 8th was a Saturday. Corrected to Friday November 7th, which the hymn-sheet form and the Facebook notice both give."
  },
  {
   "slug": "sheila-charles",
