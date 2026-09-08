@@ -12,6 +12,10 @@
 const fs = require("fs");
 const path = require("path");
 
+// Absolute URLs: Facebook and WhatsApp ignore a relative og:image, so link
+// previews for shared obituaries show no photograph without this.
+const SITE = "https://sterlingfuneralservices.com";
+
 const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));
 
@@ -177,9 +181,12 @@ function memorialPage(p) {
 <link rel="icon" type="image/png" href="../favicon-32.png" />
 <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
 <link rel="stylesheet" href="../css/styles.css" />
+<link rel="canonical" href="${SITE}/obituaries/${p.slug}.html" />
+<meta property="og:url" content="${SITE}/obituaries/${p.slug}.html" />
+<meta property="og:site_name" content="Sterling Funeral Services" />
 <meta property="og:title" content="${esc(p.name)} | Sterling Funeral Services" />
 <meta property="og:description" content="${esc(desc)}" />
-<meta property="og:image" content="../${photo ? `images/obituaries/${photo}` : "og.png"}" />
+<meta property="og:image" content="${SITE}/${photo ? `images/obituaries/${photo}` : "og.png"}" />
 <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
