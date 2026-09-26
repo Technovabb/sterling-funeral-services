@@ -1,0 +1,6 @@
+{
+  "_readme": "Approved condolences only. Keyed by the person's slug, exactly as in obituaries.json. Everything families submit arrives by email and in the Google Sheet; a message appears on the site only once it is copied in here and the build is re-run. See condolences/SETUP.md.",
+  "_example": [
+    { "name": "Jane Doe", "relationship": "Former colleague", "date": "2026-09-26", "message": "Delete this example once real messages are added." }
+  ]
+}

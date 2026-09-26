@@ -135,3 +135,69 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+/* Condolence form. Posts to a Google Apps Script web app which emails Sterling
+   and logs to a Sheet; approved messages are added to data/condolences.json by
+   hand and appear on the next build. Until the script is deployed, SCRIPT_URL
+   is empty and we fall back to a pre-filled email so no message is ever lost. */
+document.addEventListener("DOMContentLoaded", function () {
+  var CONDOLENCE_SCRIPT_URL = "";
+
+  var form = document.querySelector(".condolence-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var data = new FormData(form);
+    var person = form.getAttribute("data-person") || "";
+    var note = form.querySelector(".form-note");
+    var button = form.querySelector("button[type=submit]");
+
+    var name = (data.get("name") || "").toString().trim();
+    var message = (data.get("message") || "").toString().trim();
+    if (!name || !message) return;
+
+    function done() {
+      form.classList.add("is-sent");
+      form.innerHTML =
+        '<p class="eyebrow">Thank you</p>' +
+        "<p>Your message has been sent to Sterling, who will pass it to the family. " +
+        "It will appear on this page once they have read it.</p>";
+      form.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
+
+    if (!CONDOLENCE_SCRIPT_URL) {
+      // not deployed yet - hand the message to the visitor's mail app instead
+      var body = [
+        "Condolence for " + person,
+        "",
+        "From: " + name,
+        "Relationship: " + (data.get("relationship") || "not given"),
+        "Email: " + (data.get("email") || "not given"),
+        "",
+        message,
+      ].join("\n");
+      window.location.href =
+        "mailto:sterlingfuneralservices@gmail.com?subject=" +
+        encodeURIComponent("Condolence for " + person) +
+        "&body=" +
+        encodeURIComponent(body);
+      if (note) note.textContent = "Your email app should now be open with the message ready to send.";
+      return;
+    }
+
+    if (button) { button.disabled = true; button.textContent = "Sending…"; }
+    data.append("person", person);
+    data.append("slug", form.getAttribute("data-slug") || "");
+    fetch(CONDOLENCE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: new URLSearchParams(data),
+    })
+      .then(done)
+      .catch(function () {
+        if (button) { button.disabled = false; button.textContent = "Send your message"; }
+        if (note) note.textContent = "That did not send. Please try again, or email sterlingfuneralservices@gmail.com.";
+      });
+  });
+});

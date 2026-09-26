@@ -19,6 +19,11 @@ const SITE = "https://www.sterlingfuneralservices.com";
 const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));
 
+/* Approved condolences only, keyed by slug. Everything a visitor submits goes
+   to Sterling by email and to a Google Sheet; a message reaches the page only
+   once it has been copied into this file. Keys beginning with "_" are notes. */
+const condolences = JSON.parse(fs.readFileSync(path.join(root, "data/condolences.json"), "utf8"));
+
 function esc(s) {
   return String(s)
     .replace(/&/g, "&amp;")
@@ -75,6 +80,7 @@ const nav = (up) => `<div class="topbar"><p>Excellence Through Service</p><a hre
 <a href="${up}services.html">Services</a>
 <a href="${up}caskets.html">Caskets</a>
 <a href="${up}obituaries.html" class="active">Obituaries</a>
+<a href="${up}livestreams.html">Livestreams</a>
 <a href="${up}pre-planning.html">Pre-Planning</a>
 <a href="${up}contact.html">Contact</a>
 </nav>
@@ -88,6 +94,7 @@ const nav = (up) => `<div class="topbar"><p>Excellence Through Service</p><a hre
 <a href="${up}services.html">Services<span>&#8599;</span></a>
 <a href="${up}caskets.html">Caskets<span>&#8599;</span></a>
 <a href="${up}obituaries.html" class="active">Obituaries<span>&#8599;</span></a>
+<a href="${up}livestreams.html">Livestreams<span>&#8599;</span></a>
 <a href="${up}pre-planning.html">Pre-Planning<span>&#8599;</span></a>
 <a href="${up}contact.html">Contact<span>&#8599;</span></a>
 </nav>
@@ -139,6 +146,48 @@ function summaryLine(p) {
   if (p.summary) return p.summary;
   if (p.aka) return `Affectionately known as “${p.aka}”.`;
   return "Remembered with love by family and friends.";
+}
+
+/* The guestbook. Two routes out, because the client wants every message to
+   reach the family even when it is not published: the form posts to Sterling,
+   and a private link writes to them directly without going near the page. */
+function condolenceSection(p) {
+  const approved = Array.isArray(condolences[p.slug]) ? condolences[p.slug] : [];
+  const first = splitName(p.name).first;
+
+  const list = approved.length
+    ? `<ul class="condolence-list">\n${approved
+        .map(
+          (c) => `<li>
+<blockquote>${txt(c.message)}</blockquote>
+<p class="condolence-by">${txt(c.name)}${c.relationship ? ` <span>&middot; ${txt(c.relationship)}</span>` : ""}</p>
+</li>`
+        )
+        .join("\n")}\n</ul>`
+    : `<p class="condolence-empty">No messages have been published yet. Yours would be the first.</p>`;
+
+  const subject = encodeURIComponent(`Condolence for ${p.name}`);
+
+  return `<section class="condolences">
+<div class="condolence-inner">
+<p class="eyebrow">Condolences</p>
+<h2>Leave a message<br/><em>for the family.</em></h2>
+<p class="condolence-lede">Every message is passed to ${txt(first)}&rsquo;s family. Sterling reads each one before it appears here, so please allow a little time.</p>
+${list}
+<form class="condolence-form" data-person="${esc(p.name)}" data-slug="${esc(p.slug)}">
+<div class="field-row">
+<div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" required /></div>
+<div class="field"><label for="c-relationship">How did you know ${txt(first)}? <span class="opt">(optional)</span></label><input id="c-relationship" name="relationship" placeholder="Friend, neighbour, colleague&hellip;" /></div>
+</div>
+<div class="field"><label for="c-email">Your email <span class="opt">(optional &mdash; so the family can reply)</span></label><input id="c-email" name="email" type="email" /></div>
+<div class="field"><label for="c-message">Your message</label><textarea id="c-message" name="message" rows="5" required></textarea></div>
+<div class="hp" aria-hidden="true"><label for="c-website">Leave this empty</label><input id="c-website" name="website" tabindex="-1" autocomplete="off" /></div>
+<button class="button wine" type="submit">Send your message <span>&#8599;</span></button>
+<p class="form-note" role="status">Your message goes to Sterling, who will pass it to the family. It appears on this page only once they have read it.</p>
+</form>
+<p class="condolence-private">Would you rather write privately? <a href="mailto:sterlingfuneralservices@gmail.com?subject=${subject}">Email the family through Sterling</a> and nothing is published.</p>
+</div>
+</section>`;
 }
 
 function memorialPage(p) {
@@ -224,9 +273,115 @@ ${
 </aside>
 </div>
 </section>
+${condolenceSection(p)}
 ${contactBand}
 </main>
 ${footer("../")}
+`;
+}
+
+/* ---------- services & livestreams page ----------
+   Two audiences: people trying to attend something that has not happened yet,
+   and people who missed a service and want to watch it back. Upcoming first,
+   because someone checking on the morning of a funeral needs it immediately. */
+function serviceDateISO(p) {
+  const m = String(p.service || "").match(
+    new RegExp(`(${MONTH_NAMES.join("|")})\\s+(\\d{1,2})(?:st|nd|rd|th)?,?\\s*(\\d{4})`)
+  );
+  if (!m) return null;
+  return `${m[3]}-${String(MONTH_NAMES.indexOf(m[1]) + 1).padStart(2, "0")}-${String(Number(m[2])).padStart(2, "0")}`;
+}
+
+function servicesPage() {
+  const today = new Date().toISOString().slice(0, 10);
+  const dated = people.map((p) => ({ p, iso: serviceDateISO(p) }));
+
+  const upcoming = dated
+    .filter((x) => x.iso && x.iso >= today)
+    .sort((a, b) => a.iso.localeCompare(b.iso));
+  const watchable = dated
+    .filter((x) => x.p.livestream && !(x.iso && x.iso >= today))
+    .sort((a, b) => String(b.iso || "").localeCompare(String(a.iso || "")));
+
+  const row = (x) => {
+    const p = x.p;
+    const photo = photoFor(p.slug);
+    return `<article class="service-row">
+<a class="service-face" href="obituaries/${p.slug}.html" aria-label="View the obituary for ${esc(p.name)}">${
+      photo
+        ? `<img src="images/obituaries/${photo}" alt="" loading="lazy" />`
+        : `<span class="monogram small">${esc(initials(p.name))}</span>`
+    }</a>
+<div class="service-detail">
+<h3><a href="obituaries/${p.slug}.html">${txt(p.name)}</a></h3>
+<p class="service-when">${txt(p.service || "Details available on request")}</p>
+${p.venue ? `<p class="service-where">${txt(p.venue)}</p>` : ""}
+</div>
+${
+  p.livestream
+    ? `<a class="button wine service-watch" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">Watch <span>&#8599;</span></a>`
+    : `<span class="service-nostream">No livestream</span>`
+}
+</article>`;
+  };
+
+  const section = (title, lede, rows, empty) =>
+    `<div class="service-block">
+<h2>${title}</h2>
+<p class="lead-note">${lede}</p>
+${rows.length ? rows.map(row).join("\n") : `<p class="condolence-empty">${empty}</p>`}
+</div>`;
+
+  const desc =
+    "Upcoming funeral services arranged by Sterling Funeral Services, and livestream links for services families can watch from anywhere.";
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Services &amp; Livestreams | Sterling Funeral Services</title>
+<meta name="description" content="${esc(desc)}" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="canonical" href="${SITE}/livestreams.html" />
+<meta property="og:url" content="${SITE}/livestreams.html" />
+<meta property="og:site_name" content="Sterling Funeral Services" />
+<meta property="og:title" content="Services &amp; Livestreams | Sterling Funeral Services" />
+<meta property="og:description" content="${esc(desc)}" />
+<meta property="og:image" content="${SITE}/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+</head>
+<body>
+${nav("")}
+<main>
+<section class="page-hero">
+<div class="page-hero-image" style="background-image:url('images/gallery/procession-walk.jpg');background-position:center 15%"></div>
+<div class="page-hero-shade"></div>
+<div class="page-hero-content">
+<p class="eyebrow light">Services &amp; Livestreams</p>
+<h1>Be there,<br/><em>wherever you are.</em></h1>
+<p>Service details for the families in our care, and livestream links for those who cannot be with us in person.</p>
+</div>
+</section>
+<section class="page-body services-page">
+${section(
+  "Upcoming services",
+  "Services still to come. Times are as published in the notice — please arrive a little early.",
+  upcoming,
+  "There are no services scheduled at the moment. Please contact Sterling if you are expecting details."
+)}
+${section(
+  "Watch a service",
+  "Services that have taken place and were streamed. Links are provided by the streaming service and may not stay available indefinitely.",
+  watchable,
+  "No streamed services are listed yet."
+)}
+</section>
+${contactBand}
+</main>
+${footer("")}
 `;
 }
 
@@ -271,6 +426,8 @@ for (const p of people) {
   fs.writeFileSync(path.join(root, "obituaries", p.slug + ".html"), memorialPage(p));
   written++;
 }
+
+fs.writeFileSync(path.join(root, "livestreams.html"), servicesPage());
 
 const indexPath = path.join(root, "obituaries.html");
 let index = fs.readFileSync(indexPath, "utf8");
@@ -324,6 +481,7 @@ if (missing.length) {
 const ROOT_PAGES = [
   ["", 1.0],
   ["obituaries.html", 0.9],
+  ["livestreams.html", 0.9],
   ["services.html", 0.8],
   ["caskets.html", 0.8],
   ["pre-planning.html", 0.7],
