@@ -1296,7 +1296,10 @@
    "Relative of the Bishop, Mason and Batson families."
   ],
   "source": "cbc-radio",
-  "flag": "Taken from the CBC radio announcement — no Nation submission, date of passing or photograph is on file."
+  "flag": "Taken from the CBC radio announcement; no Nation submission is on file. His dates come from the memorial card Sterling produced (Sunrise 23 May 1959, Sunset 18 June 2025), which agrees with the published age of 66 and the 1 July service.",
+  "born": "1959-05-23",
+  "died": "2025-06-18",
+  "diedText": "June 18th, 2025"
  },
  {
   "slug": "betty-antonia-richards-downes",
