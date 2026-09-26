@@ -6,11 +6,24 @@
   "address": "Upper Carters Gap, Enterprise, Christ Church",
   "died": "2026-07-29",
   "diedText": "Wednesday, July 29th, 2026",
-  "service": "Friday, August 28th, 2026",
+  "service": "Friday, August 28th, 2026 at 2:00pm",
   "venue": "The Chapel at Coral Ridge Memorial Gardens, The Ridge, Christ Church",
-  "family": [],
+  "family": [
+   "Beloved son of the late Keith and Grettle Conliffe",
+   "Devoted husband of Virginia Conliffe",
+   "Son-in-law of Sheila and the late Darnley Rowe",
+   "Loving father of Neil and Jamila Conliffe",
+   "Cherished grandfather of Torian Green, Jesiah and Janiah Mottley and Aaliyah Conliffe",
+   "Dear brother of Angela Austin and Derek Conliffe (USA), Henderson Conliffe, Rev. Barbara Gittens-Cumberbatch, Shelley Edwards, Deighton, Eunice and Joan Webb, and the late Patrick and Keith (Ronald) Conliffe, Judy Crichlow and Sheldene Webb",
+   "Nephew of Marilyn King, Elsie Mullins (Canada), Erma Applewaite, Phyllis Hinds, Ruth Davis (UK) and the late Esther Leacock and Ronald Als",
+   "Uncle of Bryan, Tanya, Autumn, Roncia, Tiffany, Shem, Andrea, Stacy and Demir (USA), Seth, Ronaldo and Ronesha (Canada), the late Decoursey, Petrina and others",
+   "Great Uncle of Ariana, Joshua and Ellie (USA), Chayil, Karis, Damani, N’Zere, Ariyah and Yasmin",
+   "Brother-in-law of Jenny (USA) and Monica Conliffe, Cardinal Crichlow, Angela and the late Sylvester Wheeler, Jean and Noel Hoyte, Celeste and Albert Corbin, Randy and Leslie Rowe and the late Edward Austin",
+   "Cousin of Evanson and Ann Joseph",
+   "Friend of Deborah and Denise Alleyne (USA), Everton and Ann Browne, David and Norma Thorington, Rickie Clarke and many others"
+  ],
   "source": "cbc-radio",
-  "flag": "The CBC announcement says funeral details would follow in a later announcement and no Nation submission is on file — service details are taken from the Facebook notice, which itself drew a correction in the comments (“August 28th and not July 28th”). Confirm before publishing."
+  "interment": "The Frangipani Lawns"
  },
  {
   "slug": "sandrene-patricia-perch",
@@ -213,7 +226,11 @@
    "Friend of The Ruby Nazarene Church"
   ],
   "source": "nation-docx",
-  "flag": "The Nation insert did not publish an age."
+  "flag": "The Nation insert did not publish an age.",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/JuliettWilliams"
+  }
  },
  {
   "slug": "latricia-oriana-cozier",
@@ -262,7 +279,11 @@
    "Relative of the Stewart, Cumberbatch, Chase and Baptiste families.",
    "Friend of Joyce Burnett, Sandra Mahon, Monica Brown, Lucene King, Laurita Gill, Deta Hinds, Janelle Miller, Shelah Clarke-Parris, The Holder family of Sharon, St. Thomas and many others."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/PaulineStewart"
+  }
  },
  {
   "slug": "jeffrey-stanfield-wright",
@@ -816,7 +837,11 @@
    "Great-aunt of Claire, Arielle, Leah, Nolan and Daniel.",
    "Relative of the Archer, Bryant, Todd and Brathwaite families."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/GirdaArcher"
+  }
  },
  {
   "slug": "devon-zico-sealy",
@@ -933,7 +958,11 @@
    "Treasured friend of Sherry- Ann, Toni, Randy, Margaret, Simone, Barbara, Nicole, Janelle, Annice, Eugene, Cheryl-Ann, Emilio and Lennox, Dario, Sylvester, Elvis, Dr.Belle and group, Doreen Gibson and family and Shireene Tulloch and family",
    "Relative of the Williams and Allicott families, Christopher and Thomas families (Dominica)."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/JadenGibson"
+  }
  },
  {
   "slug": "fitzherbert-benedict-hobbs",
@@ -1368,7 +1397,11 @@
    "Devoted father, beloved grandfather, brother and uncle",
    "Cherished friend of many too numerous to mention"
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "The Funeral Company",
+   "url": "https://thefuneralcompany.live/DarceyBadenock"
+  }
  },
  {
   "slug": "evena-elaine-lovell",
@@ -1398,7 +1431,6 @@
   "name": "Heather Rosetta Williams",
   "address": "Paddock Road, St. Michael, and Husbands Gardens, St. James",
   "occupation": "Retired Teacher of the Wesley Hall Junior School, devoted member of the St. Stephen Anglican Church and the Celestial Voices Choir",
-  "sortDate": "2026-09-23",
   "service": "Wednesday, September 23rd, 2026 at 3:30pm",
   "venue": "St. Stephen Anglican Church, Black Rock, St. Michael",
   "interment": "Cremation will take place at a later date",
@@ -1416,7 +1448,9 @@
    "Cherished friend of Dawn Moore, Elmena Joseph, Marguerita Gibbons, Eudine Bartlett, Gaye Bourne, Sondra and Ronald Cummins, Corlita Mayers, Dr. Antonia Coward, Coral White, Andrew and Rhonda Hall, the Celestial Voices Choir, the St. Stephen’s Church Choir, Prayer Group and Church Family, the Power in the Blood Senior’s Group, and past and present staff, students and parents of the Wesley Hall Junior School"
   ],
   "source": "nation-docx",
-  "flag": "The Nation submission published neither her age nor a date of passing — she is ordered here by her service date. Her post-nominals are BSS. BSc.; confirm whether they should appear on the page."
+  "flag": "The Nation submission published neither an age nor a date of passing. Her age of 69 is taken from Sterling's own notice graphic; a date of passing is still not on file, so she is ordered by her service date. Her post-nominals are BSS. BSc. — confirm whether they should appear on the page.",
+  "age": 69,
+  "sortDate": "2026-09-23"
  },
  {
   "slug": "toria-shamila-sade-harrison",
@@ -1442,6 +1476,7 @@
    "Beloved friend of many"
   ],
   "source": "nation-docx",
-  "flag": "There was no viewing of Toria’s body, at the family’s request."
+  "flag": "There was no viewing of Toria’s body, at the family’s request.",
+  "born": "1991-05-28"
  }
 ]

@@ -215,6 +215,11 @@ ${p.born ? `<div><small>Sunrise &amp; Sunset</small><strong>${txt(bornText(p.bor
       ? `<p>${p.venue ? txt(p.venue) : ""}${p.interment ? `${p.venue ? "<br/>" : ""}Interment: ${txt(p.interment)}.` : ""}</p>`
       : `<p>Please contact Sterling for the service and interment details.</p>`
   }</div>
+${
+    p.livestream
+      ? `<div><small>Watch the service</small><a class="link-arrow stream-link" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">${txt(p.livestream.label)} <span>&#8599;</span></a></div>`
+      : ""
+  }
 <p><small>Condolences</small><br/>May be sent to <a href="mailto:sterlingfuneralservices@gmail.com">sterlingfuneralservices@gmail.com</a>.<br/><br/>Professional services entrusted to Sterling Funeral Services, #6 Sterling, Black Rock, St. Michael.</p>
 </aside>
 </div>
