@@ -344,12 +344,12 @@
   "service": "Thursday, May 21st, 2026 at 10am",
   "venue": "Graveside, Westbury Cemetery",
   "family": [
-   "Beloved brother of the late Velda and Shirley Sargeant, Joyce Durant.",
-   "Adopted brother Clyde Carrington and Randol Hall (UK).",
-   "Cherished uncle of David and Pam Holford, Yvonne Haynes, Sonia Sargeant-Spooner and Cheryl Sargeant-Hall.",
-   "Dear cousin of David and Tyrone Pilgrim, Margaret Best-Grant and Veronica Sanders (USA).",
-   "Relative of the Sargeant, Pilgrim, Best, Carrington, Hunte and Marcia Bridgeman and family.",
-   "Friend of the St. Michael Cathedral family and the Popular Supermarket (Spry Street) family and many others."
+   "Beloved brother of the late Velda and Shirley Sargeant, and Joyce Durant",
+   "Adopted brother of Clyde Carrington and Randol Hall (UK)",
+   "Cherished uncle of David and Pam Holford, Yvonne Haynes, Sonia Sargeant-Spooner and Cheryl Sargeant-Hall",
+   "Dear cousin of David and Tyrone Pilgrim, Margaret Best-Grant and Veronica Sanders (USA)",
+   "Relative of the Sargeant, Pilgrim, Best, Carrington and Hunte families, and Marcia Bridgeman and family",
+   "Friend of the St. Michael Cathedral family and the Popular Supermarket (Spry Street) family, and many others"
   ],
   "source": "nation-docx"
  },
@@ -365,19 +365,19 @@
   "service": "Wednesday, May 20th, 2026 at 10am",
   "venue": "St. John Parish, Glebe Land, St. John",
   "family": [
-   "Dear son of the late Eric and Grace St. John.",
-   "Adored husband of Carol-Ann Lowe St. John.",
-   "Cherished father of Scott, Stewart, Spencer, Straughn and Tyrique St. John.",
-   "Beloved grandfather of Sebastian and Suriya St. John.",
-   "Loving brother of David Arthur, Gillian Swartz, Dawn Hohmann, Miller St. John, Rachel Walker, Clyde McClean and the late Freddie and Sadie St. John.",
-   "Uncle of Antoinette Drakes, Raymond, Sky and Austin St. John, Chloe, Samuel and Matthew Walker, Damien Vanderpool, Anabell Wellhaus, Samantha and Marisol Hohmann, Kayla McClean and others.",
-   "Nephew of Joyce Garzon, Greta St. John and the late Sir Harold St. John, Noel and Monica St. John, Charles and Fred Chaderton and Gloria Hewitt.",
-   "Cousin of Professor. Anne St. John, Albert, Cassius and Angus St. John, Suzanne Belle, Charmaine, Nicole and Bryte St. John, AnnMarie Branch, Fiona Wright, Dawn Scott, Pedro and Paula Garzon, Sandy Rogers, Dean Chaderton, Marcia Stock, Maria Trotman, Lynda Doherty, Erica Luke, Angelica Neblett, Cameron Hewitt and the late Tessa Chaderton-Shaw, and many others.",
-   "Son-in-law of the late Rev. Carl Lowe and Cynthia Lowe.",
-   "Father-in-law of Deanne St. John and Katy Blades.",
-   "Friend of Michael Gittens, Junior Franklyn, Mitchell Toppin, Jan Gorte, Winston Alleyne, Oliver Agard, Claire and Rodney Lewis and many others too numerous to mention."
+   "Dear son of the late Eric and Grace St. John",
+   "Adored husband of Carol-Ann Lowe St. John",
+   "Cherished father of Scott, Stewart, Spencer, Straughn and Tyrique St. John",
+   "Beloved grandfather of Sebastian and Suriya St. John",
+   "Loving brother of David Arthur, Gillian Swartz, Dawn Hohmann, Miller St. John, Rachel Walker, Clyde McClean and the late Freddie and Sadie St. John",
+   "Son-in-law of the late Rev. Carl Lowe and Cynthia Lowe",
+   "Father-in-law of Deanne St. John and Katy Blades"
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/PeterSt.John"
+  }
  },
  {
   "slug": "colin-roosevelt-mascoll",
@@ -405,7 +405,11 @@
    "Friend of Michael Moseley, Tyron Browne & Gloria Mascoll (All of the UK), Henderson Jordan, Emerson Alleyne, The Oistins Domino Crew and the late Maxine Huddlestone (UK)."
   ],
   "source": "nation-docx",
-  "flag": "The hymn-sheet form recorded the weekday as Monday; May 15th 2026 was a Friday, which is what the Nation submission says."
+  "flag": "The hymn-sheet form recorded the weekday as Monday; May 15th 2026 was a Friday, which is what the Nation submission says.",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/ColinMascoll"
+  }
  },
  {
   "slug": "reynold-gilbert-dublin",
@@ -416,22 +420,22 @@
   "born": "1970-10-14",
   "died": "2026-04-19",
   "diedText": "Sunday, April 19th, 2026",
-  "service": "Tuesday, May 26th, 2026 at 10:00am",
+  "service": "Friday, May 29th, 2026 at 10:00am",
   "venue": "Bethel Baptist Church, Brittons New Road, Brittons Hill, St. Michael",
   "family": [
-   "Dear son of the late Esrene Dublin and Verdie Lewis (St. Vincent).",
-   "Beloved father of Romaine Dublin.",
-   "Cherished brother of Dulcina Long, Nesha Irving (Canada), Keisha, Daron and Brian Dublin(Trinidad and Tobago), Nicoletta Davis, Nicholas Bynoe, Kathlian Rodney, Philmore Lewis, Ardith Glasgow and Donette Lewis (St. Vincent and the Grenadines).",
-   "Adored uncle of Cameal Hoyte, Faith Peterson (USA), Nitario Hall, Crysta Callender and the late Dwayne Dublin.",
-   "Great uncle of Calia and Calica Hoyte, Jedidiah Lewis and many others.",
-   "Nephew of Sezzie DaCosta (USA), Roy DaCosta (St. Vincent and the Grenadines) and many others.",
-   "Uncle in law of Patrick Hoyte.",
-   "Brother-in-law of Denton Irving (Canada).",
-   "Cousin of the Dublin, Browne, Neptune, Ryan families of Barbados and St. Vincent and many others.",
-   "Friend of Mervin, Pat, Joy, Chris and many others."
+   "Dear son of the late Esrene Dublin and Verdie Lewis (St. Vincent)",
+   "Beloved father of Romaine Dublin",
+   "Cherished brother of Dulcina Long, Nesha Irving (Canada), Keisha, Daron and Brian Dublin (Trinidad and Tobago), Nicoletta Davis, Nicholas Bynoe, Kathlian Rodney, Philmore Lewis, Ardith Glasgow and Donette Lewis (St. Vincent and the Grenadines)",
+   "Brother-in-law of Denton Irving (Canada)",
+   "Adored uncle of Cameal Hoyte, Faith Peterson (USA), Nitario Hall, Crysta Callender and the late Dwayne Dublin",
+   "Uncle in law of Patrick Hoyte",
+   "Great uncle of Calia and Calica Hoyte, Jedidiah Lewis and many others",
+   "Nephew of Sezzie DaCosta (USA), Roy DaCosta (St. Vincent and the Grenadines) and many others",
+   "Cousin of the Dublin, Browne, Neptune and Ryan families of Barbados and St. Vincent, and many others",
+   "Friend of Mervin, Pat, Joy, Chris and many others"
   ],
   "source": "nation-docx",
-  "flag": "The Nation submission gives the service as Tuesday May 26th, 2026; the Facebook notice said Friday May 29th. Confirm which is correct."
+  "interment": "Westbury Cemetery"
  },
  {
   "slug": "coral-oneta-franklyn",
@@ -457,7 +461,11 @@
    "Relative of the Haynes family (USA) and the late Samuel Franklyn and family of Sion Hill.",
    "Dearest friend of Muriel Carrington, Barbara Worrell, Wavney Greaves, Norma and Maureen Forde, Fredine Massiah, Marvo Hope, Marion Bovell, Jackie Leacock, George Greenidge (USA), Ryan Wood the Lowe and Bartlett families and many others too numerous to mention."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/CoralFranklyn"
+  }
  },
  {
   "slug": "everton-dacosta-rowe",
@@ -480,7 +488,11 @@
    "Relative of the Rowe, Moore, Howell, Smith and Husbands families.",
    "Friend of Marset, Gregory, Athelston, Tony, Robert, Tuban, The Passage Road United Club and many others."
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/EvertonRowe"
+  }
  },
  {
   "slug": "owen-conrad-taylor-j-p",
@@ -492,7 +504,7 @@
   "born": "1951-01-01",
   "died": "2026-04-03",
   "diedText": "April 3rd, 2026",
-  "service": "Wednesday, April 22nd, 2026",
+  "service": "Wednesday, April 22nd, 2026 at 3:00pm",
   "venue": "St. Thomas Parish Church, Arch Hall, St. Thomas",
   "family": [
    "Son of the late Wilfred Cheltenham and Eugene Taylor.",
@@ -510,7 +522,10 @@
    "Friend of past & present members of the Barbados Police Service, Legal Fraternity of Barbados, Lowe, Rock, Farmer & Allman families, St. Thomas & St. Joseph church families, Modern Old Scholars, Coffee Gully & Branchbury communities of St. Joseph & Arch Hall, St. Thomas & many others too numerous to mention."
   ],
   "source": "nation-docx",
-  "flag": "The hymn-sheet form records the service time as “000pm” — time omitted here pending confirmation."
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/OwenTaylor"
+  }
  },
  {
   "slug": "david-patrick-shepherd",
@@ -534,7 +549,7 @@
    "Friend of many."
   ],
   "source": "nation-docx",
-  "flag": "The Nation submission read “Thursday April 24th, 2026”, but April 24th was a Friday. Both sources say Thursday and the Facebook notice gives the 23rd, so Thursday April 23rd is used. Worth confirming with the family."
+  "flag": "Date of passing was taken from the Nation submission (Monday 30 March 2026); Sterling's notice card gives no date of passing. The service date of Thursday 23 April is confirmed by the card."
  },
  {
   "slug": "maxine-adina-layne",
@@ -609,7 +624,11 @@
    "Cousin of Shawn Clarke of Supreme Counselling for Personal Development, Kelvin, Karen, Janelle, Roger, Jackie and Wilma.",
    "Friend of, Clarence, Vondene, Luciann, Sonia, Donna and Juliette the Griffith"
   ],
-  "source": "nation-docx"
+  "source": "nation-docx",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/ShaniGamble"
+  }
  },
  {
   "slug": "walter-francis",
@@ -673,7 +692,11 @@
    "Friend of Zoe Griffith and family, Storm Husbands, Jireh Mosely and many others from St.Stephen’s Primary, Harrison College and The University of Toronto."
   ],
   "source": "nation-docx",
-  "flag": "The hymn-sheet form records the date of birth as 14 February 2026, which is the date of passing — a form error, so no date of birth is shown."
+  "flag": "The hymn-sheet form records the date of birth as 14 February 2026, which is the date of passing — a form error, so no date of birth is shown.",
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/Sidneyforde"
+  }
  },
  {
   "slug": "sylvester-bertie-cumberbatch",
