@@ -24,6 +24,10 @@ const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"
    once it has been copied into this file. Keys beginning with "_" are notes. */
 const condolences = JSON.parse(fs.readFileSync(path.join(root, "data/condolences.json"), "utf8"));
 
+/* Thank-you messages from families Sterling has served. Same rule as the
+   condolences: it reaches the page only once it has been copied in here. */
+const testimonials = JSON.parse(fs.readFileSync(path.join(root, "data/testimonials.json"), "utf8"));
+
 function esc(s) {
   return String(s)
     .replace(/&/g, "&amp;")
@@ -71,32 +75,43 @@ people.sort((a, b) => sortKey(b).localeCompare(sortKey(a)));
 
 /* ---------- shared chrome ---------- */
 
-const nav = (up) => `<div class="topbar"><p>Excellence Through Service</p><a href="tel:+12465717965">Available 24/7 &middot; (246) 571-7965</a></div>
+/* One list, used for both the desktop and the mobile nav. Keeping it in a
+   single place is deliberate: the Livestreams link was once added to the
+   desktop nav and missed in the mobile one, and the page it was missing from
+   was the only page where "Obituasries" carried class="active", so the usual
+   search-and-replace skipped it. `current` is the page's own file name. */
+const NAV_ITEMS = [
+  ["index.html", "Home"],
+  ["about.html", "About"],
+  ["services.html", "Services"],
+  ["caskets.html", "Caskets"],
+  ["obituaries.html", "Obituaries"],
+  // Label, not filename: someone looking for the time of a funeral would never
+  // think to click "Livestreams". The file name stays put so no link breaks.
+  ["livestreams.html", "Funerals"],
+  ["testimonials.html", "Testimonials"],
+  ["pre-planning.html", "Pre-Planning"],
+  ["contact.html", "Contact"],
+];
+
+const navLinks = (up, current, arrow) =>
+  NAV_ITEMS.map(
+    ([href, label]) =>
+      `<a href="${up}${href}"${href === current ? ' class="active"' : ""}>${label}${arrow ? "<span>&#8599;</span>" : ""}</a>`
+  ).join("\n");
+
+const nav = (up, current = "obituaries.html") => `<div class="topbar"><p>Excellence Through Service</p><a href="tel:+12465717965">Available 24/7 &middot; (246) 571-7965</a></div>
 <header class="site-header">
 <a class="brand" href="${up}index.html" aria-label="Sterling Funeral Services home"><img class="brand-logo" src="${up}images/brand/logo-horizontal.png" alt="Sterling Funeral Services" /></a>
 <nav class="desktop-nav" aria-label="Main navigation">
-<a href="${up}index.html">Home</a>
-<a href="${up}about.html">About</a>
-<a href="${up}services.html">Services</a>
-<a href="${up}caskets.html">Caskets</a>
-<a href="${up}obituaries.html" class="active">Obituaries</a>
-<a href="${up}livestreams.html">Livestreams</a>
-<a href="${up}pre-planning.html">Pre-Planning</a>
-<a href="${up}contact.html">Contact</a>
+${navLinks(up, current, false)}
 </nav>
 <a class="header-call" href="tel:+12465717965"><span>Call anytime</span>(246) 571-7965</a>
 <button class="menu-button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation"><span></span><span></span></button>
 </header>
 <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
 <nav aria-label="Mobile navigation">
-<a href="${up}index.html">Home<span>&#8599;</span></a>
-<a href="${up}about.html">About<span>&#8599;</span></a>
-<a href="${up}services.html">Services<span>&#8599;</span></a>
-<a href="${up}caskets.html">Caskets<span>&#8599;</span></a>
-<a href="${up}obituaries.html" class="active">Obituaries<span>&#8599;</span></a>
-<a href="${up}livestreams.html">Livestreams<span>&#8599;</span></a>
-<a href="${up}pre-planning.html">Pre-Planning<span>&#8599;</span></a>
-<a href="${up}contact.html">Contact<span>&#8599;</span></a>
+${navLinks(up, current, true)}
 </nav>
 <a href="${up}contact.html" class="button gold">Arrange a consultation</a>
 </div>`;
@@ -112,7 +127,7 @@ const contactBand = `<section class="contact-band">
 const footer = (up) => `<footer>
 <div class="footer-main">
 <div class="footer-brand"><a class="brand" href="${up}index.html"><img class="brand-logo" src="${up}images/brand/logo-horizontal.png" alt="Sterling Funeral Services" /></a><p>Compassionate guidance and dignified care, whenever your family needs us.</p></div>
-<div><h4>Explore</h4><a href="${up}about.html">About us</a><a href="${up}services.html">Our services</a><a href="${up}caskets.html">Casket collection</a><a href="${up}obituaries.html">Obituaries</a><a href="${up}livestreams.html">Livestreams</a><a href="${up}pre-planning.html">Pre-planning</a></div>
+<div><h4>Explore</h4><a href="${up}about.html">About us</a><a href="${up}services.html">Our services</a><a href="${up}caskets.html">Casket collection</a><a href="${up}obituaries.html">Obituaries</a><a href="${up}livestreams.html">Funerals</a><a href="${up}testimonials.html">Testimonials</a><a href="${up}pre-planning.html">Pre-planning</a></div>
 <div><h4>Contact</h4><a href="tel:+12465717965">(246) 571-7965</a><a href="tel:+12462349195">(246) 234-9195</a><a href="mailto:sterlingfuneralservices@gmail.com">sterlingfuneralservices@gmail.com</a></div>
 <div><h4>Availability</h4><p>Support available<br/>24 hours a day, 7 days a week</p><a class="footer-whatsapp" href="https://wa.me/12462349195" target="_blank" rel="noreferrer">WhatsApp us &#8594;</a></div>
 </div>
@@ -354,7 +369,7 @@ ${rows.length ? rows.map(row).join("\n") : `<p class="condolence-empty">${empty}
 <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
-${nav("")}
+${nav("", "livestreams.html")}
 <main>
 <section class="page-hero">
 <div class="page-hero-image" style="background-image:url('images/gallery/procession-walk.jpg');background-position:center 15%"></div>
@@ -419,6 +434,121 @@ ${image}
 </article>`;
 }
 
+/* ---------- upcoming funerals, on the home page ----------
+   Someone who has heard a death announced on the radio comes to the home page
+   wanting one thing: the day and the time. This puts it above everything else.
+   When nothing is upcoming the band is omitted entirely rather than rendered
+   empty - a permanently empty "Upcoming funerals" heading reads as neglect. */
+function upcomingBlock() {
+  const today = new Date().toISOString().slice(0, 10);
+  const upcoming = people
+    .map((p) => ({ p, iso: serviceDateISO(p) }))
+    .filter((x) => x.iso && x.iso >= today)
+    .sort((a, b) => a.iso.localeCompare(b.iso));
+
+  if (!upcoming.length) return "";
+
+  const row = ({ p }) => `<article class="upcoming-row">
+<div><h3><a href="obituaries/${p.slug}.html">${txt(p.name)}</a></h3>
+<p class="upcoming-when">${txt(p.service)}</p>
+${p.venue ? `<p class="upcoming-where">${txt(p.venue)}</p>` : ""}</div>
+${p.livestream ? `<a class="stream-link" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">Watch live <span>&#8599;</span></a>` : ""}
+</article>`;
+
+  return `<section class="section upcoming-home" aria-label="Upcoming funerals">
+<div class="copy-block">
+<p class="eyebrow">Upcoming funerals</p>
+<h2>Services<br/><em>still to come.</em></h2>
+</div>
+<div class="upcoming-list">
+${upcoming.map(row).join("\n")}
+</div>
+<a class="link-arrow" href="livestreams.html">All services and livestreams <span>&#8594;</span></a>
+</section>`;
+}
+
+/* ---------- testimonials ----------
+   Words families sent Sterling afterwards. Nothing here is generated or
+   paraphrased: an entry exists only because a family wrote it and agreed to
+   it being shown. The page works with an empty list, because an honest
+   invitation reads better than an invented quote. */
+function testimonialsPage() {
+  const entries = Array.isArray(testimonials.entries) ? testimonials.entries : [];
+
+  const quote = (t) => {
+    const attrib = [t.about ? txt(t.about) : null, t.date ? txt(t.date) : null]
+      .filter(Boolean)
+      .join(" &middot; ");
+    return `<li>
+<blockquote>${txt(t.message)}</blockquote>
+<p class="condolence-by">${txt(t.from)}${attrib ? ` <span>&middot; ${attrib}</span>` : ""}</p>
+</li>`;
+  };
+
+  const list = entries.length
+    ? `<ul class="condolence-list testimonial-list">\n${entries.map(quote).join("\n")}\n</ul>`
+    : `<p class="condolence-empty">We are gathering messages from the families we have served. If Sterling cared for someone you love, yours would be the first.</p>`;
+
+  const desc =
+    "What families across Barbados say about the care they received from Sterling Funeral Services.";
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Testimonials | Sterling Funeral Services</title>
+<meta name="description" content="${esc(desc)}" />
+<link rel="icon" type="image/png" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="canonical" href="${SITE}/testimonials.html" />
+<meta property="og:url" content="${SITE}/testimonials.html" />
+<meta property="og:site_name" content="Sterling Funeral Services" />
+<meta property="og:title" content="Testimonials | Sterling Funeral Services" />
+<meta property="og:description" content="${esc(desc)}" />
+<meta property="og:image" content="${SITE}/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+</head>
+<body>
+${nav("", "testimonials.html")}
+<main>
+<section class="page-hero">
+<div class="page-hero-image" style="background-image:url('images/gallery/floral-tribute.jpg');background-position:center 45%"></div>
+<div class="page-hero-shade"></div>
+<div class="page-hero-content">
+<p class="eyebrow light">Testimonials</p>
+<h1>In the words<br/><em>of the families we serve.</em></h1>
+<p>Excellence through service is not a line we wrote for ourselves. These are messages from families Sterling has cared for.</p>
+</div>
+</section>
+<section class="page-body testimonials-page">
+<div class="condolence-inner">
+<p class="eyebrow">Thank you notes</p>
+<h2>Messages from<br/><em>families we have served.</em></h2>
+${list}
+<form class="condolence-form testimonial-form" data-person="Sterling Funeral Services" data-slug="testimonials" data-kind="Testimonial" data-thanks="Thank you for taking the time to write to us. Sterling will read your message, and will ask you first if we would like to show it on this page.">
+<p class="eyebrow">Share your experience</p>
+<p class="condolence-lede">If Sterling cared for someone you love, we would be grateful to hear how we did &mdash; the difficult parts as well as the kind ones. Nothing appears on this page unless you are happy for it to.</p>
+<div class="field-row">
+<div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" required /></div>
+<div class="field"><label for="c-relationship">Who were we caring for? <span class="opt">(optional)</span></label><input id="c-relationship" name="relationship" placeholder="My mother, Brenda&hellip;" /></div>
+</div>
+<div class="field"><label for="c-email">Your email <span class="opt">(optional &mdash; so we can reply)</span></label><input id="c-email" name="email" type="email" /></div>
+<div class="field"><label for="c-message">Your message</label><textarea id="c-message" name="message" rows="5" required></textarea></div>
+<div class="hp" aria-hidden="true"><label for="c-website">Leave this empty</label><input id="c-website" name="website" tabindex="-1" autocomplete="off" /></div>
+<button class="button wine" type="submit">Send your message <span>&#8599;</span></button>
+<p class="form-note" role="status">Your message goes to Sterling. We will ask before showing it here.</p>
+</form>
+<p class="condolence-private">You can also write to us directly at <a href="mailto:sterlingfuneralservices@gmail.com?subject=${encodeURIComponent("A message for Sterling")}">sterlingfuneralservices@gmail.com</a>.</p>
+</div>
+</section>
+${contactBand}
+</main>
+${footer("")}
+`;
+}
+
 /* ---------- write ---------- */
 
 let written = 0;
@@ -428,6 +558,18 @@ for (const p of people) {
 }
 
 fs.writeFileSync(path.join(root, "livestreams.html"), servicesPage());
+fs.writeFileSync(path.join(root, "testimonials.html"), testimonialsPage());
+
+/* Home page: replace whatever sits between the markers. Regex is anchored on
+   HTML comments so the rest of the hand-written page is never touched. */
+const homePath = path.join(root, "index.html");
+let home = fs.readFileSync(homePath, "utf8");
+const homeBlock = /<!-- upcoming:start -->[\s\S]*?<!-- upcoming:end -->/;
+if (!homeBlock.test(home)) throw new Error("upcoming markers not found in index.html");
+fs.writeFileSync(
+  homePath,
+  home.replace(homeBlock, "<!-- upcoming:start -->" + upcomingBlock() + "<!-- upcoming:end -->")
+);
 
 const indexPath = path.join(root, "obituaries.html");
 let index = fs.readFileSync(indexPath, "utf8");
@@ -482,6 +624,7 @@ const ROOT_PAGES = [
   ["", 1.0],
   ["obituaries.html", 0.9],
   ["livestreams.html", 0.9],
+  ["testimonials.html", 0.8],
   ["services.html", 0.8],
   ["caskets.html", 0.8],
   ["pre-planning.html", 0.7],

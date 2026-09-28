@@ -341,3 +341,21 @@ footer{background:var(--wine-deep);color:#bfaeb1;padding:75px max(5vw,calc((100v
   .service-detail{flex-basis:100%;order:3}
   .service-watch,.service-nostream{margin-left:auto}
 }
+
+/* --- testimonials --- */
+.testimonials-page .condolence-inner{max-width:780px;margin:0 auto}
+.testimonial-list li{border-left-color:var(--wine)}
+.testimonial-list blockquote{font-size:17px}
+.testimonial-form{margin-top:8px;border-top:1px solid rgba(103,24,45,.14);padding-top:34px}
+.testimonial-form .eyebrow{margin-bottom:10px}
+
+/* --- upcoming funerals, home page --- */
+.upcoming-home{background:var(--cream)}
+.upcoming-list{display:grid;gap:14px;margin:6px 0 28px}
+.upcoming-row{background:#fff;border-left:2px solid var(--gold);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.upcoming-row h3{margin:0;font:400 21px/1.3 'Playfair Display',serif}
+.upcoming-row h3 a{color:var(--wine);text-decoration:none}
+.upcoming-row h3 a:hover{text-decoration:underline}
+.upcoming-when{margin:7px 0 0;font-size:13px;letter-spacing:.04em;color:var(--ink)}
+.upcoming-where{margin:3px 0 0;font-size:13px;color:var(--muted)}
+@media(max-width:600px){.upcoming-row{padding:17px 19px}.upcoming-row h3{font-size:19px}}

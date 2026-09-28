@@ -152,6 +152,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var person = form.getAttribute("data-person") || "";
     var note = form.querySelector(".form-note");
     var button = form.querySelector("button[type=submit]");
+    // The testimonials page reuses this form, so the wording is not hardcoded:
+    // "Condolence for Sterling Funeral Services" would be the wrong subject.
+    var kind = form.getAttribute("data-kind") || "Condolence";
+    var subject = kind + " for " + person;
+    var thanks =
+      form.getAttribute("data-thanks") ||
+      "Your message has been sent to Sterling, who will pass it to the family. " +
+        "It will appear on this page once they have read it.";
 
     var name = (data.get("name") || "").toString().trim();
     var message = (data.get("message") || "").toString().trim();
@@ -159,17 +167,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function done() {
       form.classList.add("is-sent");
-      form.innerHTML =
-        '<p class="eyebrow">Thank you</p>' +
-        "<p>Your message has been sent to Sterling, who will pass it to the family. " +
-        "It will appear on this page once they have read it.</p>";
+      form.innerHTML = '<p class="eyebrow">Thank you</p><p>' + thanks + "</p>";
       form.scrollIntoView({ block: "center", behavior: "smooth" });
     }
 
     if (!CONDOLENCE_SCRIPT_URL) {
       // not deployed yet - hand the message to the visitor's mail app instead
       var body = [
-        "Condolence for " + person,
+        subject,
         "",
         "From: " + name,
         "Relationship: " + (data.get("relationship") || "not given"),
@@ -179,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
       ].join("\n");
       window.location.href =
         "mailto:sterlingfuneralservices@gmail.com?subject=" +
-        encodeURIComponent("Condolence for " + person) +
+        encodeURIComponent(subject) +
         "&body=" +
         encodeURIComponent(body);
       if (note) note.textContent = "Your email app should now be open with the message ready to send.";

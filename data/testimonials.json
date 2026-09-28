@@ -1,0 +1,10 @@
+{
+  "_readme": "Real messages from families Sterling has served. Add an object to the list below and re-run tools/build-obituaries.js. Keys starting with an underscore are ignored by the build. Never invent an entry - only publish words a family actually wrote, and only with their permission. 'from' is how the family signed themselves, 'about' is optional (the person they were laid to rest, or a member of staff), 'date' is optional and shown as given.",
+  "_example": {
+    "from": "The Nicholls Family",
+    "about": "for our mother, Brenda",
+    "date": "March 2026",
+    "message": "You were very kind and compassionate towards us and words cannot express how much we appreciated it."
+  },
+  "entries": []
+}
