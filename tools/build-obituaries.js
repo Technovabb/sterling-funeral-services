@@ -460,7 +460,7 @@ function upcomingBlock() {
 <div><h3><a href="obituaries/${p.slug}.html">${txt(p.name)}</a></h3>
 <p class="upcoming-when">${txt(p.service)}</p>
 ${p.venue ? `<p class="upcoming-where">${txt(p.venue)}</p>` : ""}</div>
-${p.livestream ? `<a class="stream-link" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">Watch live <span>&#8599;</span></a>` : ""}
+${p.livestream ? `<a class="button wine card-watch" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer" aria-label="Watch the service for ${esc(p.name)} live">Watch live <span>&#8599;</span></a>` : ""}
 </article>`;
 
   return `<section class="section upcoming-home" aria-label="Upcoming funerals">
