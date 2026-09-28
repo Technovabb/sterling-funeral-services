@@ -222,9 +222,24 @@ document.addEventListener("DOMContentLoaded", function () {
         _captcha: "false",
       }),
     })
+      // FormSubmit answers 200 OK even when it has NOT delivered - an
+      // unactivated address comes back as {"success":"false"}. Checking only
+      // the status code told families their condolence had been sent when it
+      // had gone nowhere, so the body is what decides.
       .then(function (r) {
-        if (!r.ok) throw new Error("send failed");
-        return done();
+        if (!r.ok) throw new Error("http " + r.status);
+        return r.json().then(
+          function (body) {
+            if (String(body && body.success) !== "true") {
+              throw new Error(String((body && body.message) || "not delivered"));
+            }
+            return done();
+          },
+          function () {
+            // no JSON back: assume the worst and use the fallback
+            throw new Error("unreadable response");
+          }
+        );
       })
       .catch(function () {
         if (button) { button.disabled = false; button.innerHTML = label; }

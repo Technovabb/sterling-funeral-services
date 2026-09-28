@@ -1,5 +1,5 @@
 {
-  "_readme": "Real messages from families Sterling has served. Add an object to the list below and re-run tools/build-obituaries.js. Keys starting with an underscore are ignored by the build. Never invent an entry - only publish words a family actually wrote, and only with their permission. 'from' is how the family signed themselves, 'about' is optional (the person they were laid to rest, or a member of staff), 'date' is optional and shown as given.",
+  "_readme": "Real messages from families Sterling has served. Add an object to the list below and re-run tools/build-obituaries.js. Keys starting with an underscore are ignored by the build. Never invent an entry - only publish words a family actually wrote, and only with their permission. 'from' is how the family signed themselves, 'about' is optional (the person they were laid to rest, or a member of staff), 'date' is optional and shown as given. A blank line in 'message' starts a new paragraph.",
   "_example": {
     "from": "The Nicholls Family",
     "about": "for our mother, Brenda",
@@ -14,11 +14,10 @@
       "message": "I entrusted the care & funeral for my daughter La’Teisha Holligan to Sterling Funeral Home. Sheradan Lewis, the Funeral Director was VERY professional but also VERY personable. He made an emotional, sad and tiring time manageable. There was NOTHING he didn’t do, he answered ALL questions, no matter how small or insignificant they may have seemed. He answered my calls each and every time even late at night (when something I remembered that he needed to know). Mr Lewis never once made me feel like I was a bother. He made me feel like he was grieving along with us. Everything was done with a level of unmatched professionalism, yet it was done with warmth and care, never like a business transaction. On the day of her Homegoing Service, Mr Lewis and his team were exceptional. They made sure that the family’s needs and requests were met. The service was excellent and the floral arrangements were exceptional and beautifully done. Thank you Mr Lewis and team of Sterling Funeral Services. You guys are the best, you made a very sad occasion a beautiful, dignified and memorable celebration of life. I cannot thank you enough and I highly recommend Sterling Funeral Home to anyone, who is looking for the perfect place to have their loved ones be given the best care for their home going, the team is Top Notch and very caring."
     },
     {
-      "_note": "Spelling: Shawn's Nation submission reads 'Beloved husband of Shamica Holder' and names the business 'Shamica's Variety'. Confirm with her before changing it to Shamika.",
-      "from": "Shamica Holder",
+      "from": "The Holder Family",
       "about": "for my husband, Shawn",
       "date": "July 2026",
-      "message": "With sincere gratitude, we would like to thank Sterling Funeral Home. Our family would like to express our heartfelt gratitude to Sterling Funeral Home for the exceptional care, compassion, and professionalism shown during such a difficult time."
+      "message": "With sincere gratitude, we would like to thank Sterling Funeral Home.\n\nOur family would like to express our heartfelt gratitude to Sterling Funeral Home for the exceptional care, compassion, and professionalism shown during such a difficult time.\n\nThank you for the beautiful and dignified funeral service you arranged for my beloved husband. Every detail was handled with such care and respect, bringing comfort to the family and honoring his life in the most meaningful way.\n\nYour kindness, support, and dedication will never be forgotten. We are truly grateful."
     }
   ]
 }

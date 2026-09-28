@@ -479,8 +479,17 @@ function testimonialsPage() {
     const attrib = [t.about ? txt(t.about) : null, t.date ? txt(t.date) : null]
       .filter(Boolean)
       .join(" &middot; ");
+    // A thank-you note is often several paragraphs. Without this they run
+    // together into one slab, which is unreadable at this length.
+    const paras = String(t.message)
+      .split(/\n\s*\n/)
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map((s) => `<p>${txt(s)}</p>`)
+      .join("\n");
+
     return `<li>
-<blockquote>${txt(t.message)}</blockquote>
+<blockquote>${paras}</blockquote>
 <p class="condolence-by">${txt(t.from)}${attrib ? ` <span>&middot; ${attrib}</span>` : ""}</p>
 </li>`;
   };

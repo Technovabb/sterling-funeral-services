@@ -32,8 +32,15 @@ confirmed, and **the first submission is consumed by the activation**. So:
    there.)
 3. Send a second test message. That one should arrive in the inbox.
 
-Until step 2 is done, messages will *appear* to send but will not be
-delivered. Do not skip it.
+Step 1 has been done once already, on 28 September 2026, so the activation
+email should be sitting in the inbox. If it has been lost, send another test
+message and FormSubmit will send a fresh one.
+
+Until step 2 is done nothing is delivered — but the form no longer pretends
+otherwise. FormSubmit answers **200 OK with `{"success":"false"}`** for an
+unactivated address, so the handler checks the body rather than the status
+code; an undelivered message now falls back to the visitor's mail app instead
+of showing a thank-you.
 
 ### What this means for privacy
 
