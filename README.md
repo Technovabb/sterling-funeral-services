@@ -51,14 +51,17 @@ obituaries with no photograph. If the domain ever changes, update:
 
 ## Condolences
 
-Each obituary page carries a guestbook. Messages do **not** publish
-automatically — they go to Sterling by email and to a Google Sheet, Sheradan
-passes them all to the family, and only the ones he approves are copied into
-`data/condolences.json` and appear on the next build.
+Each obituary page carries a guestbook, and `testimonials.html` reuses the same
+form. Messages do **not** publish automatically — they reach Sterling by email
+through FormSubmit, Sheradan passes them all to the family, and only the ones
+he approves are copied into `data/condolences.json` (or
+`data/testimonials.json`) and appear on the next build.
 
-Until the Apps Script is deployed, the form falls back to opening the visitor's
-email app with the message pre-filled, so nothing is lost. See
-`condolences/SETUP.md`.
+If the send fails the form falls back to the visitor's email app with the
+message pre-filled, so nothing is lost.
+
+**FormSubmit needs a one-time activation click before it delivers anything** —
+see `condolences/SETUP.md`.
 
 ## Services & livestreams
 

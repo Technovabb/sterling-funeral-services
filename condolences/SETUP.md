@@ -11,36 +11,50 @@ worse.
 ## The flow
 
 1. A visitor fills in the form on an obituary page.
-2. The form posts to a Google Apps Script web app.
-3. The script **emails Sterling** and **appends a row to a Google Sheet**.
-4. Sheradan passes the message to the family.
-5. To publish it, the message is copied into `data/condolences.json` and the
+2. The form posts to **FormSubmit**, which emails
+   `sterlingfuneralservices@gmail.com`.
+3. Sheradan passes the message to the family.
+4. To publish it, the message is copied into `data/condolences.json` and the
    site is rebuilt.
 
-Until step 2 is set up, the form falls back to opening the visitor's email app
-with the message pre-filled, so **no message is ever lost**.
+If that request fails for any reason — no signal, service down — the form
+falls back to opening the visitor's email app with everything filled in, and
+their typed message stays on screen. **No message is ever lost.**
 
-## Setting up the Apps Script (about ten minutes, once)
+## One-time activation — REQUIRED
 
-1. Create a Google Sheet — call it *Sterling condolences*.
-2. In that Sheet: **Extensions → Apps Script**.
-3. Delete the placeholder code, paste in everything from `Code.gs`, and save.
-4. **Deploy → New deployment → Web app**
-   - *Execute as*: **Me**
-   - *Who has access*: **Anyone**
-5. Authorise when prompted (it will warn the app is unverified — that is normal
-   for your own script).
-6. Copy the **web app URL**. It looks like
-   `https://script.google.com/macros/s/AKfy.../exec`
-7. Paste it into `js/main.js`, into the empty `CONDOLENCE_SCRIPT_URL`:
+FormSubmit will not deliver anything to an address until that address has been
+confirmed, and **the first submission is consumed by the activation**. So:
 
-   ```js
-   var CONDOLENCE_SCRIPT_URL = "https://script.google.com/macros/s/AKfy.../exec";
-   ```
+1. Go to any obituary page on the live site and send a short test message.
+2. FormSubmit emails `sterlingfuneralservices@gmail.com` asking to confirm.
+   **Open it and click the activation link.** (Check spam — it often lands
+   there.)
+3. Send a second test message. That one should arrive in the inbox.
 
-8. Commit and push. The form then posts silently instead of opening an email.
+Until step 2 is done, messages will *appear* to send but will not be
+delivered. Do not skip it.
 
-Test it once from the live site and check both the email and the Sheet.
+### What this means for privacy
+
+Condolences are personal, and they now travel through a third party
+(formsubmit.co) on the way to Sterling's inbox. That was a deliberate choice,
+taken because it needs no Google account and no server, and because the
+previous mailto-only form simply did nothing on a machine with no mail client
+configured. The form says plainly that a message goes to Sterling, the email
+address is optional and never shown on the page, and nothing is published
+without Sheradan's say-so.
+
+To change the destination address later, edit `CONDOLENCE_ENDPOINT` at the top
+of the condolence handler in `js/main.js` — and activate the new address the
+same way.
+
+### The old Google Apps Script
+
+`Code.gs` in this folder is the earlier Apps Script approach, which also logged
+to a Google Sheet. It is **not in use**. It is kept because a Sheet is a better
+record than an inbox, and if Sterling ever wants that, deploy it as a web app
+and point `CONDOLENCE_ENDPOINT` at its URL instead.
 
 ## Publishing a message
 

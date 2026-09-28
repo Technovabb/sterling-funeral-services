@@ -136,12 +136,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-/* Condolence form. Posts to a Google Apps Script web app which emails Sterling
-   and logs to a Sheet; approved messages are added to data/condolences.json by
-   hand and appear on the next build. Until the script is deployed, SCRIPT_URL
-   is empty and we fall back to a pre-filled email so no message is ever lost. */
+/* Condolence form, and the testimonial form that reuses it.
+
+   Posts to FormSubmit, which emails Sterling. Nothing a visitor writes is
+   published automatically: Sheradan passes every message to the family, and a
+   message reaches the page only once it has been copied into
+   data/condolences.json (or data/testimonials.json) by hand.
+
+   If the request fails for any reason the message is NOT lost - we fall back
+   to opening the visitor's mail app with everything filled in. That fallback
+   is the whole reason this is worth doing over a plain mailto: on a phone,
+   mailto is a jarring hand-off, and on a machine with no mail client
+   configured it does nothing at all. */
 document.addEventListener("DOMContentLoaded", function () {
-  var CONDOLENCE_SCRIPT_URL = "";
+  var CONDOLENCE_ENDPOINT = "https://formsubmit.co/ajax/sterlingfuneralservices@gmail.com";
 
   var form = document.querySelector(".condolence-form");
   if (!form) return;
@@ -171,8 +179,13 @@ document.addEventListener("DOMContentLoaded", function () {
       form.scrollIntoView({ block: "center", behavior: "smooth" });
     }
 
-    if (!CONDOLENCE_SCRIPT_URL) {
-      // not deployed yet - hand the message to the visitor's mail app instead
+    // Honeypot. A bot fills it, a person never sees it: accept and drop.
+    if ((data.get("website") || "").toString().trim()) {
+      done();
+      return;
+    }
+
+    function fallbackToMail() {
       var body = [
         subject,
         "",
@@ -188,21 +201,34 @@ document.addEventListener("DOMContentLoaded", function () {
         "&body=" +
         encodeURIComponent(body);
       if (note) note.textContent = "Your email app should now be open with the message ready to send.";
-      return;
     }
 
+    var label = button ? button.innerHTML : "";
     if (button) { button.disabled = true; button.textContent = "Sending…"; }
-    data.append("person", person);
-    data.append("slug", form.getAttribute("data-slug") || "");
-    fetch(CONDOLENCE_SCRIPT_URL, {
+
+    fetch(CONDOLENCE_ENDPOINT, {
       method: "POST",
-      mode: "no-cors",
-      body: new URLSearchParams(data),
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        name: name,
+        relationship: (data.get("relationship") || "").toString().trim(),
+        email: (data.get("email") || "").toString().trim(),
+        message: message,
+        // which page it came from, so Sheradan knows where to publish it
+        person: person,
+        slug: form.getAttribute("data-slug") || "",
+        _subject: subject,
+        _template: "table",
+        _captcha: "false",
+      }),
     })
-      .then(done)
+      .then(function (r) {
+        if (!r.ok) throw new Error("send failed");
+        return done();
+      })
       .catch(function () {
-        if (button) { button.disabled = false; button.textContent = "Send your message"; }
-        if (note) note.textContent = "That did not send. Please try again, or email sterlingfuneralservices@gmail.com.";
+        if (button) { button.disabled = false; button.innerHTML = label; }
+        fallbackToMail();
       });
   });
 });
