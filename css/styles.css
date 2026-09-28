@@ -344,8 +344,11 @@ footer{background:var(--wine-deep);color:#bfaeb1;padding:75px max(5vw,calc((100v
 
 /* --- testimonials --- */
 .testimonials-page .condolence-inner{max-width:780px;margin:0 auto}
-.testimonial-list li{border-left-color:var(--wine)}
-.testimonial-list blockquote{font-size:17px}
+.testimonial-list li{border-left-color:var(--wine);padding:26px 30px}
+/* Thank-you notes run long - a family writes pages, not a sentence. Italic
+   serif over 200 words is punishing, and the 780px column gave 95 characters
+   a line when 60-75 is comfortable. Roman, and a capped measure. */
+.testimonial-list blockquote{font-style:normal;font-size:16.5px;line-height:1.85;max-width:56ch}
 .testimonial-form{margin-top:8px;border-top:1px solid rgba(103,24,45,.14);padding-top:34px}
 .testimonial-form .eyebrow{margin-bottom:10px}
 
