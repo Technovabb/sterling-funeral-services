@@ -431,7 +431,13 @@ ${image}
 <p class="obituary-dates">${dates}</p>
 <h3><a href="${href}">${txt(p.name)}</a></h3>
 <p>${txt(blurb(p))}</p>
-<a class="link-arrow" href="${href}">View obituary <span>&#8594;</span></a>
+<div class="obituary-card-actions">
+<a class="link-arrow" href="${href}">View obituary <span>&#8594;</span></a>${
+    p.livestream
+      ? `\n<a class="button wine card-watch" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer" aria-label="Watch the service for ${esc(p.name)}">Watch <span>&#8599;</span></a>`
+      : ""
+  }
+</div>
 </div>
 </article>`;
 }
