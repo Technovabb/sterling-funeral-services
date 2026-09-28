@@ -280,8 +280,10 @@ ${p.born ? `<div><small>Sunrise &amp; Sunset</small><strong>${txt(bornText(p.bor
       : `<p>Please contact Sterling for the service and interment details.</p>`
   }</div>
 ${
+    // A real button, as on the Funerals page. It used to be a text link
+    // reading only the streaming company's name, which nobody took for "watch".
     p.livestream
-      ? `<div><small>Watch the service</small><a class="link-arrow stream-link" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">${txt(p.livestream.label)} <span>&#8599;</span></a></div>`
+      ? `<div class="memorial-watch"><small>Watch the service</small><a class="button wine service-watch" href="${esc(p.livestream.url)}" target="_blank" rel="noreferrer">Watch now <span>&#8599;</span></a><p class="memorial-watch-via">Streamed by ${txt(p.livestream.label)}</p></div>`
       : ""
   }
 <p><small>Condolences</small><br/>May be sent to <a href="mailto:sterlingfuneralservices@gmail.com">sterlingfuneralservices@gmail.com</a>.<br/><br/>Professional services entrusted to Sterling Funeral Services, #6 Sterling, Black Rock, St. Michael.</p>
