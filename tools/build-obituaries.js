@@ -597,6 +597,66 @@ if (!gridBlock.test(index)) throw new Error("obituary-grid block not found in ob
 // note: an unchanged result just means the index was already up to date
 fs.writeFileSync(indexPath, index.replace(gridBlock, grid + "\n</section>"));
 
+/* ---------- fingerprint local assets ----------
+   GitHub Pages sends every file with max-age=600 and we cannot change that,
+   so a replaced photo kept showing the old picture for up to ten minutes -
+   longer from GitHub's own cache - even after a refresh. Every reference to a
+   local image, the stylesheet and the script gets ?v=<first 8 of an md5 of
+   the file>. Change the file and its address changes, so the new one is
+   fetched at once; leave it alone and the address, and the cache, stay put.
+   Runs over every page, hand-written ones included, and is idempotent: an
+   existing ?v= is replaced, never stacked. Run the build after changing ANY
+   photo, even one on a hand-written page such as caskets.html. */
+const crypto = require("crypto");
+const hashCache = new Map();
+function fingerprint(rel) {
+  if (!hashCache.has(rel)) {
+    const abs = path.join(root, rel);
+    hashCache.set(
+      rel,
+      fs.existsSync(abs) ? crypto.createHash("md5").update(fs.readFileSync(abs)).digest("hex").slice(0, 8) : null
+    );
+  }
+  return hashCache.get(rel);
+}
+// The path always starts at images/, css/ or js/ - whatever precedes it
+// ("../", the site URL) is left untouched. It must end at a quote, pipe
+// (data-images lists), bracket or whitespace, so partial names never match.
+const ASSET = /\b((?:images\/[\w\-\/.]+?\.(?:jpe?g|png|webp|gif|svg))|css\/styles\.css|js\/main\.js)(?:\?v=[0-9a-f]{8})?(?=["'|)\s])/g;
+const stamp = (text) =>
+  text.replace(ASSET, (whole, rel) => {
+    const v = fingerprint(rel);
+    return v ? `${rel}?v=${v}` : rel;
+  });
+
+// The stylesheet first: its own fingerprint must reflect its stamped content.
+{
+  const cssPath = path.join(root, "css/styles.css");
+  const css = fs.readFileSync(cssPath, "utf8");
+  const cssOut = css.replace(/url\((['"]?)\.\.\/((?:images)\/[^'")?]+)(?:\?v=[0-9a-f]{8})?\1\)/g, (m, q, rel) => {
+    const v = fingerprint(rel);
+    return v ? `url(${q}../${rel}?v=${v}${q})` : m;
+  });
+  if (cssOut !== css) fs.writeFileSync(cssPath, cssOut);
+  hashCache.delete("css/styles.css");
+}
+
+let stamped = 0;
+const pages = [
+  ...fs.readdirSync(root).filter((f) => f.endsWith(".html")),
+  ...fs.readdirSync(path.join(root, "obituaries")).filter((f) => f.endsWith(".html")).map((f) => "obituaries/" + f),
+];
+for (const rel of pages) {
+  const abs = path.join(root, rel);
+  const html = fs.readFileSync(abs, "utf8");
+  const out = stamp(html);
+  if (out !== html) {
+    fs.writeFileSync(abs, out);
+    stamped++;
+  }
+}
+console.log(`Fingerprinted asset links on all ${pages.length} pages.`);
+
 /* Every published date carries its weekday, so the calendar can check it.
    This catches the commonest transcription slip - right weekday, wrong day
    number - which is exactly how four wrong dates reached the live site. */

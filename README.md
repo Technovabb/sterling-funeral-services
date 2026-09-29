@@ -69,3 +69,18 @@ see `condolences/SETUP.md`.
 by hand. It lists services still to come, then past services that were
 streamed. Both come from the `service` and `livestream` fields in
 `data/obituaries.json`.
+
+## Changing a photo
+
+**Run `node tools/build-obituaries.js` after replacing any image** — an obituary
+portrait, a casket photo, anything under `images/`. The build stamps every
+image, stylesheet and script link with a fingerprint of the file
+(`photo.jpg?v=3f9a1c2e`). GitHub Pages tells browsers to keep files for ten
+minutes and that cannot be changed, so without a new fingerprint a replaced
+photo keeps showing the old picture even after a refresh. It is safe to run the
+build as often as you like; nothing changes if no file has.
+
+Obituary portraits are cropped to a 4:5 head-and-shoulders frame, the shape of
+the tiles on the Obituaries page. A photo of another shape still works — it
+fills the tile, trimmed around the face — but a full-length or group shot
+should be cropped first so the face is roughly the size of the others.
