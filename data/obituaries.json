@@ -1606,9 +1606,100 @@
   "source": "nation-docx",
   "flag": "There was no viewing of Toria’s body, at the family’s request.",
   "born": "1991-05-28",
-  "livestream": {
+ "livestream": {
    "label": "KD34 Streaming Services",
    "url": "https://www.youtube.com/watch?v=oQkWrFz8f4U"
   }
+ },
+ {
+  "slug": "adrian-carlton-howell",
+  "name": "Adrian Carlton Howell",
+  "age": 48,
+  "address": "2nd Avenue, Grazettes, St. Michael",
+  "occupation": "Employee of Phoenix Protection Services",
+  "died": "2026-09-10",
+  "diedText": "Thursday, September 10th, 2026",
+  "service": "Friday, October 9th, 2026 at 12:00 noon",
+  "venue": "Abundant Life Assembly, Haynes Hill, Bank Hall, St. Michael",
+  "interment": "Westbury Cemetery",
+  "family": [
+   "Grandson of the late Grace Howell",
+   "Beloved son of Carlton and Janis Howell",
+   "Devoted father of Miracle Howell",
+   "Cherished brother of Alicia Ashby and Tricia Licorish",
+   "Dear uncle of Naiomi Howell",
+   "Nephew of Christopher and Monica Howell and Pamela Freeman",
+   "Cousin of Chris Jr., Kevin and Andrew Howell and Ann Marie Williams",
+   "Brother-in-law of Jason Ashby and Dwayne Licorish",
+   "Close friend of Amanda Clarke and the late Dean Pilgrim"
+  ],
+  "source": "nation-docx",
+  "serviceNotes": [
+   "Adrian will repose for viewing at the church from 11:00am until the start of the service.",
+   "Floral tributes may be delivered to the church from 11:00am until 12:00 noon."
+  ],
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/AdrianHowell"
+  }
+ },
+ {
+  "slug": "esther-malina-gittens",
+  "name": "Esther Malina Gittens",
+  "age": 67,
+  "address": "Lot 21, 1st Avenue, Accommodation Road, Spooners Hill, St. Michael",
+  "occupation": "An exceptionally gifted seamstress who brought creativity and precision to every piece she created",
+  "died": "2026-08-20",
+  "diedText": "Thursday, August 20th, 2026",
+  "service": "Saturday, October 10th, 2026 at 10:00am",
+  "venue": "The Church of the Nazarene, Bank Hall, St. Michael",
+  "family": [
+   "Daughter of the late Joyce Gittens",
+   "Beloved mother of Stephen and Stephon Gittens",
+   "Adored grandmother of Miguel Mings, Alisa and Devonte Gittens",
+   "Cherished sister of Jean Gittens and John Mayers",
+   "Niece of Anthony Gittens (Canada)",
+   "Cousin of Kim Gittens-Smith, Dave Archer, Ian, Steven, Sabrina Gittens and Ericka Cadogan",
+   "Aunt of Romel Gittens",
+   "Relative of the Hamblin family",
+   "Special friend of Vincent Thomas, Anna Harvey, Cecelia Yearwood, Ann Dixon, Basil Clarke, Deborah Goodridge, Jennifer Christopher, Susan Holder, Joan Gooding and Angela Gay",
+   "Friend of the Harveys, Vonnette Lee, Veronica Miller, Sandra Hinkson, Shakela Wiltshire-Belgrave, Nicole Alleyne, Jacqueline Boyce, Harry Gill, David Murray and many others"
+  ],
+  "source": "nation-docx",
+  "serviceNotes": [
+   "This is a memorial service.",
+   "Floral tributes are respectfully declined."
+  ],
+  "livestream": {
+   "label": "Sharing Memories Forever",
+   "url": "https://sharingmemoriesforever.live/EstherGittens"
+  }
+ },
+ {
+  "slug": "neamri-obadiah-archibald",
+  "name": "Neamri Obadiah Archibald",
+  "age": 91,
+  "address": "#29 Dover Crescent, Cave Hill, St. Michael, and formerly of Greggs Village, St. Vincent and the Grenadines",
+  "died": "2026-09-01",
+  "diedText": "Tuesday, September 1st, 2026",
+  "service": "Tuesday, October 6th, 2026 at 10:00am",
+  "venue": "The Chapel of Westbury Cemetery, Westbury Road, St. Michael",
+  "interment": "Westbury Cemetery, immediately following the service",
+  "family": [
+   "Son of the late Carolina Archibald (St. Vincent)",
+   "Beloved husband of the late Laurel Archibald",
+   "Cherished father of Jemima Roberts (USA), Peggy and the late Donovan and Matthew Baptiste",
+   "Father-in-law of Junior Roberts",
+   "Adored grandfather of Rolando, Shelly, Sheryl, Devon and Jevorn Roberts (USA)",
+   "Proud great-grandfather of Romario, Shadan, Jayden, Deshawn, Tyra and Treshawn",
+   "Brother of Betty (St. Vincent) and three others",
+   "Brother-in-law of Cennette Rodney and Roselind Miller",
+   "Relative of many others in St. Vincent and the Grenadines and Barbados"
+  ],
+  "source": "nation-docx",
+  "serviceNotes": [
+   "Neamri will repose for viewing at the chapel from 9:00am until the start of the service.",
+   "Floral tributes may be delivered to the chapel from 9:00am until 10:00am."
+  ]
  }
 ]

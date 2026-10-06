@@ -278,6 +278,10 @@ ${p.born ? `<div><small>Sunrise &amp; Sunset</small><strong>${txt(bornText(p.bor
     p.venue || p.interment
       ? `<p>${p.venue ? txt(p.venue) : ""}${p.interment ? `${p.venue ? "<br/>" : ""}Interment: ${txt(p.interment)}.` : ""}</p>`
       : `<p>Please contact Sterling for the service and interment details.</p>`
+  }${
+    Array.isArray(p.serviceNotes) && p.serviceNotes.length
+      ? `<p>${p.serviceNotes.map((note) => txt(note)).join("<br/>")}</p>`
+      : ""
   }</div>
 ${
     // A real button, as on the Funerals page. It used to be a text link
