@@ -1,4 +1,26 @@
-# Condolences — how it works and how to finish setting it up
+# Condolences — how it works
+
+**Since October 2026 condolences go straight onto the page.** A visitor's
+message is stored in Supabase and shown to everyone at once; Sterling also gets
+an email copy through FormSubmit. Sterling can take a message down with the
+passcode at `/condolences/remove.html` (or in the Supabase dashboard: Table
+Editor → condolences → set `hidden` to true).
+
+- Database setup: `condolences/supabase-setup.sql` (run once in the Supabase
+  SQL Editor; it also explains how to set the removal passcode).
+- The project's URL and public key live in `js/live-config.js`. Empty them to
+  return the form to email-only.
+- Spam checks run in the database: no links, max 3 posts per connection per 10
+  minutes, no duplicate posts, length limits, plus the form's honeypot.
+- `data/condolences.json` still works for messages added by hand (from a card
+  or an email); those are built into the page beneath the live ones.
+
+Testimonials are unchanged: emailed only, published by hand.
+
+---
+
+## History: the email-only setup (still used for testimonials)
+
 
 Families can leave a message on any obituary page. Every message reaches
 Sheradan; he passes them all to the family, and chooses which ones also appear

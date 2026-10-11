@@ -19,9 +19,9 @@ const SITE = "https://www.sterlingfuneralservices.com";
 const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));
 
-/* Approved condolences only, keyed by slug. Everything a visitor submits goes
-   to Sterling by email and to a Google Sheet; a message reaches the page only
-   once it has been copied into this file. Keys beginning with "_" are notes. */
+/* Condolences added by hand (from email, a card, a phone call), keyed by slug.
+   Messages posted on the site itself live in Supabase and load in the browser
+   - see js/main.js. Keys beginning with "_" are notes. */
 const condolences = JSON.parse(fs.readFileSync(path.join(root, "data/condolences.json"), "utf8"));
 
 /* Thank-you messages from families Sterling has served. Same rule as the
@@ -133,6 +133,7 @@ const footer = (up) => `<footer>
 </div>
 <div class="footer-bottom"><p>&copy; <span id="year"></span> Sterling Funeral Services. All rights reserved.</p></div>
 </footer>
+<script src="${up}js/live-config.js"></script>
 <script src="${up}js/main.js"></script>
 </body>
 </html>`;
@@ -163,9 +164,10 @@ function summaryLine(p) {
   return "Remembered with love by family and friends.";
 }
 
-/* The guestbook. Two routes out, because the client wants every message to
-   reach the family even when it is not published: the form posts to Sterling,
-   and a private link writes to them directly without going near the page. */
+/* The guestbook. Messages posted through the form go straight onto the page
+   (js/main.js loads and posts them live, and emails Sterling a copy); the
+   hand-approved ones below are built in. A private link writes to the family
+   through Sterling without going near the page. */
 function condolenceSection(p) {
   const approved = Array.isArray(condolences[p.slug]) ? condolences[p.slug] : [];
   const first = splitName(p.name).first;
@@ -187,7 +189,7 @@ function condolenceSection(p) {
 <div class="condolence-inner">
 <p class="eyebrow">Condolences</p>
 <h2>Leave a message<br/><em>for the family.</em></h2>
-<p class="condolence-lede">Every message is passed to ${txt(first)}&rsquo;s family. Sterling reads each one before it appears here, so please allow a little time.</p>
+<p class="condolence-lede">Your message appears here as soon as you post it, and Sterling passes every one to ${txt(first)}&rsquo;s family.</p>
 ${list}
 <form class="condolence-form" data-person="${esc(p.name)}" data-slug="${esc(p.slug)}">
 <div class="field-row">
@@ -197,8 +199,8 @@ ${list}
 <div class="field"><label for="c-email">Your email <span class="opt">(optional &mdash; so the family can reply)</span></label><input id="c-email" name="email" type="email" /></div>
 <div class="field"><label for="c-message">Your message</label><textarea id="c-message" name="message" rows="5" required></textarea></div>
 <div class="hp" aria-hidden="true"><label for="c-website">Leave this empty</label><input id="c-website" name="website" tabindex="-1" autocomplete="off" /></div>
-<button class="button wine" type="submit">Send your message <span>&#8599;</span></button>
-<p class="form-note" role="status">Your message goes to Sterling, who will pass it to the family. It appears on this page only once they have read it.</p>
+<button class="button wine" type="submit">Post your message <span>&#8599;</span></button>
+<p class="form-note" role="status">Your name, relationship and message will be shown on this page. Your email is never shown.</p>
 </form>
 <p class="condolence-private">Would you rather write privately? <a href="mailto:sterlingfuneralservices@gmail.com?subject=${subject}">Email the family through Sterling</a> and nothing is published.</p>
 </div>
@@ -626,7 +628,7 @@ function fingerprint(rel) {
 // The path always starts at images/, css/ or js/ - whatever precedes it
 // ("../", the site URL) is left untouched. It must end at a quote, pipe
 // (data-images lists), bracket or whitespace, so partial names never match.
-const ASSET = /\b((?:images\/[\w\-\/.]+?\.(?:jpe?g|png|webp|gif|svg))|css\/styles\.css|js\/main\.js)(?:\?v=[0-9a-f]{8})?(?=["'|)\s])/g;
+const ASSET = /\b((?:images\/[\w\-\/.]+?\.(?:jpe?g|png|webp|gif|svg))|css\/styles\.css|js\/[\w\-]+\.js)(?:\?v=[0-9a-f]{8})?(?=["'|)\s])/g;
 const stamp = (text) =>
   text.replace(ASSET, (whole, rel) => {
     const v = fingerprint(rel);
@@ -649,6 +651,7 @@ let stamped = 0;
 const pages = [
   ...fs.readdirSync(root).filter((f) => f.endsWith(".html")),
   ...fs.readdirSync(path.join(root, "obituaries")).filter((f) => f.endsWith(".html")).map((f) => "obituaries/" + f),
+  "condolences/remove.html",
 ];
 for (const rel of pages) {
   const abs = path.join(root, rel);

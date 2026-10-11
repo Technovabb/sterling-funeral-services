@@ -138,10 +138,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* Condolence form, and the testimonial form that reuses it.
 
-   Posts to FormSubmit, which emails Sterling. Nothing a visitor writes is
-   published automatically: Sheradan passes every message to the family, and a
-   message reaches the page only once it has been copied into
-   data/condolences.json (or data/testimonials.json) by hand.
+   Condolences go straight onto the page. They are stored in Supabase (see
+   condolences/supabase-setup.sql), whose database checks every message for
+   spam - links, floods, double posts - before accepting it, and they appear
+   for every visitor as soon as they are posted. Sterling can take one down
+   with the passcode at condolences/remove.html. Each message is also emailed
+   to Sterling through FormSubmit, so the family still receives them all.
+   The hand-approved messages in data/condolences.json are built into the page
+   and show beneath the live ones.
+
+   Testimonials are not published automatically: they are only emailed, and
+   reach the page once copied into data/testimonials.json by hand.
 
    If the request fails for any reason the message is NOT lost - we fall back
    to opening the visitor's mail app with everything filled in. That fallback
@@ -150,9 +157,75 @@ document.addEventListener("DOMContentLoaded", function () {
    configured it does nothing at all. */
 document.addEventListener("DOMContentLoaded", function () {
   var CONDOLENCE_ENDPOINT = "https://formsubmit.co/ajax/sterlingfuneralservices@gmail.com";
+  // From js/live-config.js, loaded only on obituary pages. While it is
+  // absent or empty, condolences fall back to email-only.
+  var cfg = window.STERLING_LIVE || {};
+  var LIVE_URL = cfg.url || "";
+  var LIVE_KEY = cfg.key || "";
 
   var form = document.querySelector(".condolence-form");
   if (!form) return;
+
+  var slug = form.getAttribute("data-slug") || "";
+  var live = !!(LIVE_URL && LIVE_KEY) && !form.getAttribute("data-kind");
+
+  function liveHeaders(extra) {
+    var h = { apikey: LIVE_KEY, Accept: "application/json" };
+    // Legacy JWT keys must also be sent as a bearer token; the newer
+    // sb_publishable_ keys must not be.
+    if (/^eyJ/.test(LIVE_KEY)) h.Authorization = "Bearer " + LIVE_KEY;
+    for (var k in extra) h[k] = extra[k];
+    return h;
+  }
+
+  var section = form.closest(".condolence-inner") || form.parentNode;
+  function listEl() {
+    var list = section.querySelector(".condolence-list");
+    if (!list) {
+      list = document.createElement("ul");
+      list.className = "condolence-list";
+      var empty = section.querySelector(".condolence-empty");
+      if (empty) empty.parentNode.replaceChild(list, empty);
+      else section.insertBefore(list, form);
+    }
+    return list;
+  }
+  // textContent throughout: visitors' words are never parsed as HTML.
+  function renderItem(c, prepend) {
+    var li = document.createElement("li");
+    li.className = "condolence-live";
+    var q = document.createElement("blockquote");
+    q.textContent = c.message;
+    var by = document.createElement("p");
+    by.className = "condolence-by";
+    by.textContent = c.name;
+    if (c.relationship) {
+      var span = document.createElement("span");
+      span.textContent = "· " + c.relationship;
+      by.appendChild(document.createTextNode(" "));
+      by.appendChild(span);
+    }
+    li.appendChild(q);
+    li.appendChild(by);
+    var list = listEl();
+    if (prepend) list.insertBefore(li, list.firstChild);
+    else list.appendChild(li);
+  }
+
+  if (live) {
+    fetch(
+      LIVE_URL + "/rest/v1/condolences?slug=eq." + encodeURIComponent(slug) +
+        "&select=id,name,relationship,message,created_at&order=created_at.desc&limit=300",
+      { headers: liveHeaders({}) }
+    )
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        // newest first, above the hand-approved messages; walk backwards so
+        // each prepend keeps that order
+        for (var i = rows.length - 1; i >= 0; i--) renderItem(rows[i], true);
+      })
+      .catch(function () {});
+  }
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -170,12 +243,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "It will appear on this page once they have read it.";
 
     var name = (data.get("name") || "").toString().trim();
+    var relationship = (data.get("relationship") || "").toString().trim();
+    var email = (data.get("email") || "").toString().trim();
     var message = (data.get("message") || "").toString().trim();
     if (!name || !message) return;
 
-    function done() {
+    function done(text) {
       form.classList.add("is-sent");
-      form.innerHTML = '<p class="eyebrow">Thank you</p><p>' + thanks + "</p>";
+      form.innerHTML = '<p class="eyebrow">Thank you</p><p>' + (text || thanks) + "</p>";
       form.scrollIntoView({ block: "center", behavior: "smooth" });
     }
 
@@ -190,8 +265,8 @@ document.addEventListener("DOMContentLoaded", function () {
         subject,
         "",
         "From: " + name,
-        "Relationship: " + (data.get("relationship") || "not given"),
-        "Email: " + (data.get("email") || "not given"),
+        "Relationship: " + (relationship || "not given"),
+        "Email: " + (email || "not given"),
         "",
         message,
       ].join("\n");
@@ -203,47 +278,97 @@ document.addEventListener("DOMContentLoaded", function () {
       if (note) note.textContent = "Your email app should now be open with the message ready to send.";
     }
 
-    var label = button ? button.innerHTML : "";
-    if (button) { button.disabled = true; button.textContent = "Sending…"; }
+    function sendEmail() {
+      return fetch(CONDOLENCE_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: name,
+          relationship: relationship,
+          email: email,
+          message: message,
+          // which page it came from
+          person: person,
+          slug: slug,
+          _subject: subject,
+          _template: "table",
+          _captcha: "false",
+        }),
+      })
+        // FormSubmit answers 200 OK even when it has NOT delivered - an
+        // unactivated address comes back as {"success":"false"}. Checking only
+        // the status code told families their condolence had been sent when it
+        // had gone nowhere, so the body is what decides.
+        .then(function (r) {
+          if (!r.ok) throw new Error("http " + r.status);
+          return r.json().then(
+            function (body) {
+              if (String(body && body.success) !== "true") {
+                throw new Error(String((body && body.message) || "not delivered"));
+              }
+            },
+            function () {
+              // no JSON back: assume the worst
+              throw new Error("unreadable response");
+            }
+          );
+        });
+    }
 
-    fetch(CONDOLENCE_ENDPOINT, {
+    var label = button ? button.innerHTML : "";
+    if (button) { button.disabled = true; button.textContent = live ? "Posting…" : "Sending…"; }
+    function reset() {
+      if (button) { button.disabled = false; button.innerHTML = label; }
+    }
+
+    if (!live) {
+      sendEmail().then(function () { done(); }, function () { reset(); fallbackToMail(); });
+      return;
+    }
+
+    fetch(LIVE_URL + "/rest/v1/condolences", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: liveHeaders({ "Content-Type": "application/json", Prefer: "return=minimal" }),
       body: JSON.stringify({
+        slug: slug,
         name: name,
-        relationship: (data.get("relationship") || "").toString().trim(),
-        email: (data.get("email") || "").toString().trim(),
+        relationship: relationship || null,
+        email: email || null,
         message: message,
-        // which page it came from, so Sheradan knows where to publish it
-        person: person,
-        slug: form.getAttribute("data-slug") || "",
-        _subject: subject,
-        _template: "table",
-        _captcha: "false",
       }),
     })
-      // FormSubmit answers 200 OK even when it has NOT delivered - an
-      // unactivated address comes back as {"success":"false"}. Checking only
-      // the status code told families their condolence had been sent when it
-      // had gone nowhere, so the body is what decides.
       .then(function (r) {
-        if (!r.ok) throw new Error("http " + r.status);
+        if (r.ok) return;
         return r.json().then(
-          function (body) {
-            if (String(body && body.success) !== "true") {
-              throw new Error(String((body && body.message) || "not delivered"));
-            }
-            return done();
-          },
-          function () {
-            // no JSON back: assume the worst and use the fallback
-            throw new Error("unreadable response");
-          }
+          function (body) { throw new Error(String((body && body.message) || "http " + r.status)); },
+          function () { throw new Error("http " + r.status); }
         );
       })
-      .catch(function () {
-        if (button) { button.disabled = false; button.innerHTML = label; }
-        fallbackToMail();
-      });
+      .then(
+        function () {
+          renderItem({ name: name, relationship: relationship, message: message }, true);
+          // Sterling's copy. Its failure must not undo a message that is
+          // already on the page, so it is not waited on.
+          sendEmail().catch(function () {});
+          done("Your message is now on this page, and Sterling will pass it to the family.");
+        },
+        function (err) {
+          reset();
+          var why = String(err && err.message);
+          // The database's spam checks: tell the visitor what to change
+          // rather than dumping them into their mail app.
+          if (/links are not allowed/.test(why)) {
+            if (note) note.textContent = "Please remove any web addresses from your message and try again.";
+          } else if (/duplicate/.test(why)) {
+            done("Your message is already on this page. Thank you.");
+          } else if (/too many/.test(why)) {
+            if (note) note.textContent = "Several messages have just been posted from your connection. Please try again in a few minutes.";
+          } else if (/length/.test(why)) {
+            if (note) note.textContent = "Please keep your name under 80 characters and your message under 2,000.";
+          } else {
+            fallbackToMail();
+          }
+        }
+      );
   });
 });
