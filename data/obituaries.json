@@ -1606,7 +1606,7 @@
   "source": "nation-docx",
   "flag": "There was no viewing of Toria’s body, at the family’s request.",
   "born": "1991-05-28",
- "livestream": {
+  "livestream": {
    "label": "KD34 Streaming Services",
    "url": "https://www.youtube.com/watch?v=oQkWrFz8f4U"
   }
@@ -1700,6 +1700,70 @@
   "serviceNotes": [
    "Neamri will repose for viewing at the chapel from 9:00am until the start of the service.",
    "Floral tributes may be delivered to the chapel from 9:00am until 10:00am."
+  ]
+ },
+ {
+  "slug": "graham-gordon-nathaniel-stanford",
+  "name": "Graham Gordon Nathaniel Stanford",
+  "age": 84,
+  "address": "4th Avenue, Amity Lodge, Christ Church",
+  "died": "2026-09-17",
+  "diedText": "Thursday, September 17th, 2026",
+  "service": "Saturday, October 17th, 2026 at 10:00am",
+  "venue": "The James Street Methodist Church, James Street, Bridgetown, St. Michael",
+  "interment": "Coral Ridge Memorial Gardens, The Ridge, Christ Church",
+  "family": [
+   "Cherished husband of Dolores Alleyne-Stanford",
+   "Devoted father of Oral (Jordy Bear Woodcraft), Joan (Christ Church Girls’ School) and Mark Stanford (UK) and Althea Stanford-Downie (Ministry of Finance)",
+   "Stepfather of Lana Alleyne",
+   "Proud grandfather of Arielle and Malachi Stanford, Hannah Yarde, Giovani Downie and the late Jordan Stanford",
+   "Great-grandfather of Aaryn Stanford and Alpheus Yarde",
+   "Brother of Fredine Bishop, Gabriel, Joseph, Delores, Pedro and Michael Stanford",
+   "Uncle of many",
+   "Father-in-law of Curtis Downie and Donna Killeen",
+   "Relative of the Greaves, Francis and Austin families",
+   "Friend of Ken and Valda Farrell, Fredrick and June Moore and Reynold McClean"
+  ],
+  "source": "nation-docx",
+  "flag": "The livestream points at the KD34 channel’s live page — swap in the recording’s address after the service.",
+  "livestream": {
+   "label": "KD34 Streaming Services",
+   "url": "https://www.youtube.com/@kd34streamingservices42/live"
+  },
+  "serviceNotes": [
+   "Graham will repose for viewing at Paramount Funeral Home, Hindsbury Road, St. Michael on Friday October 16th from 4:00pm until 6:00pm, and at the church from 9:00am until the start of the service.",
+   "Floral tributes may be delivered to Sterling Funeral Services c/o Paramount Funeral Home, Hindsbury Road, St. Michael no later than 8:00am on Saturday morning."
+  ]
+ },
+ {
+  "slug": "annamarie-marriel-denny",
+  "name": "Annamarie Marriel Denny",
+  "age": 66,
+  "address": "Murray’s Land, Clevedale, Black Rock, St. Michael",
+  "died": "2026-09-25",
+  "diedText": "Friday, September 25th, 2026",
+  "service": "Thursday, October 15th, 2026 at 2:00pm",
+  "venue": "Wesleyan Holiness Church, Clevedale, Black Rock, St. Michael",
+  "interment": "Westbury Cemetery",
+  "family": [
+   "Daughter of the late Elizabeth Dennie",
+   "Beloved mother of Lisa and Donna Denny",
+   "Cherished grandmother of Jaeda, RasMenelik, RasMelchizedek and EmpressMakeda",
+   "Adored sister of Jasenter Dennie, Kyrone Denny, Bridgette St. John (USA), Sonia Hotchkiss (USA), Michael and Malcolm Denny (UK)",
+   "Dear aunt of Levere and Michelle Highland, Charles and Brian St. John, Anderson Bowen, Rico Jones, Jason and Haldane Denny, Valentina, Nyra and the late Ryan Highland",
+   "Great-aunt of many",
+   "Cousin of many",
+   "Friend of many"
+  ],
+  "source": "nation-docx",
+  "flag": "Streamed on Zoom, meeting ID 605 900 8854.",
+  "livestream": {
+   "label": "Zoom (Meeting ID 605 900 8854)",
+   "url": "https://zoom.us/j/6059008854"
+  },
+  "serviceNotes": [
+   "There will be no viewing of Annamarie’s body.",
+   "Floral tributes may be delivered to the church from 1:00pm until 2:00pm on Thursday."
   ]
  }
 ]
