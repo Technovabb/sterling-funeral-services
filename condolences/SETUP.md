@@ -1,19 +1,38 @@
 # Condolences — how it works
 
-**Since October 2026 condolences go straight onto the page.** A visitor's
-message is stored in Supabase and shown to everyone at once; Sterling also gets
-an email copy through FormSubmit. Sterling can take a message down with the
-passcode at `/condolences/remove.html` (or in the Supabase dashboard: Table
-Editor → condolences → set `hidden` to true).
+**Condolences go straight onto the page.** A visitor's message is saved by the
+Apps Script in `Code.gs` into a Google Sheet in Sterling's own Google account,
+emailed to sterlingfuneralservices@gmail.com, and shown on the obituary page to
+everyone at once.
 
-- Database setup: `condolences/supabase-setup.sql` (run once in the Supabase
-  SQL Editor; it also explains how to set the removal passcode).
-- The project's URL and public key live in `js/live-config.js`. Empty them to
-  return the form to email-only.
-- Spam checks run in the database: no links, max 3 posts per connection per 10
-  minutes, no duplicate posts, length limits, plus the form's honeypot.
-- `data/condolences.json` still works for messages added by hand (from a card
-  or an email); those are built into the page beneath the live ones.
+**To take a message down:** open the Sheet, find its row, and change
+**Show on website** to `no` (or delete the row). It disappears within a minute.
+
+Spam checks in the script: no links, at most 15 posts per page per 10 minutes,
+no duplicate posts, length limits, plus the form's hidden honeypot field.
+`data/condolences.json` still works for messages added by hand (from a card or
+an email); those are built into the page beneath the live ones.
+
+## One-time setup (signed in as sterlingfuneralservices@gmail.com)
+
+1. Go to sheets.google.com → **Blank spreadsheet**. Name it
+   *Sterling Condolences*.
+2. **Extensions → Apps Script.** Delete what is in the editor, paste in the
+   whole of `Code.gs`, and click **Save** (disk icon).
+3. In the function menu next to **Run**, choose `setup`, click **Run**, then
+   **Review permissions** → choose the Sterling account → **Advanced** →
+   **Go to … (unsafe)** → **Allow**. (Google says "unsafe" for every script
+   that has not been through its review; this one is Sterling's own.)
+4. **Deploy → New deployment** → gear icon → **Web app**.
+   *Execute as*: **Me**. *Who has access*: **Anyone**. → **Deploy**.
+5. Copy the **Web app URL** (it ends in `/exec`) and send it to whoever looks
+   after the website. It goes into `js/live-config.js`, then rebuild and push.
+
+If `Code.gs` is changed later: **Deploy → Manage deployments → pencil →
+Version: New version → Deploy**, which keeps the same URL.
+
+To turn live posting off, empty the `url` in `js/live-config.js` and rebuild:
+the form goes back to email-only (FormSubmit).
 
 Testimonials are unchanged: emailed only, published by hand.
 
@@ -78,12 +97,6 @@ To change the destination address later, edit `CONDOLENCE_ENDPOINT` at the top
 of the condolence handler in `js/main.js` — and activate the new address the
 same way.
 
-### The old Google Apps Script
-
-`Code.gs` in this folder is the earlier Apps Script approach, which also logged
-to a Google Sheet. It is **not in use**. It is kept because a Sheet is a better
-record than an inbox, and if Sterling ever wants that, deploy it as a web app
-and point `CONDOLENCE_ENDPOINT` at its URL instead.
 
 ## Publishing a message
 

@@ -138,14 +138,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* Condolence form, and the testimonial form that reuses it.
 
-   Condolences go straight onto the page. They are stored in Supabase (see
-   condolences/supabase-setup.sql), whose database checks every message for
-   spam - links, floods, double posts - before accepting it, and they appear
-   for every visitor as soon as they are posted. Sterling can take one down
-   with the passcode at condolences/remove.html. Each message is also emailed
-   to Sterling through FormSubmit, so the family still receives them all.
-   The hand-approved messages in data/condolences.json are built into the page
-   and show beneath the live ones.
+   Condolences go straight onto the page. They are stored in a Google Sheet
+   in Sterling's own account by the Apps Script in condolences/Code.gs, which
+   turns away spam (links, floods, double posts), emails each new message to
+   Sterling, and serves the page's messages back to every visitor. Sterling
+   takes one down by setting "Show on website" to no in the Sheet. The
+   hand-added messages in data/condolences.json are built into the page and
+   show beneath the live ones.
 
    Testimonials are not published automatically: they are only emailed, and
    reach the page once copied into data/testimonials.json by hand.
@@ -161,22 +160,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // absent or empty, condolences fall back to email-only.
   var cfg = window.STERLING_LIVE || {};
   var LIVE_URL = cfg.url || "";
-  var LIVE_KEY = cfg.key || "";
 
   var form = document.querySelector(".condolence-form");
   if (!form) return;
 
   var slug = form.getAttribute("data-slug") || "";
-  var live = !!(LIVE_URL && LIVE_KEY) && !form.getAttribute("data-kind");
-
-  function liveHeaders(extra) {
-    var h = { apikey: LIVE_KEY, Accept: "application/json" };
-    // Legacy JWT keys must also be sent as a bearer token; the newer
-    // sb_publishable_ keys must not be.
-    if (/^eyJ/.test(LIVE_KEY)) h.Authorization = "Bearer " + LIVE_KEY;
-    for (var k in extra) h[k] = extra[k];
-    return h;
-  }
+  var live = !!LIVE_URL && !form.getAttribute("data-kind");
 
   var section = form.closest(".condolence-inner") || form.parentNode;
   function listEl() {
@@ -213,14 +202,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (live) {
-    fetch(
-      LIVE_URL + "/rest/v1/condolences?slug=eq." + encodeURIComponent(slug) +
-        "&select=id,name,relationship,message,created_at&order=created_at.desc&limit=300",
-      { headers: liveHeaders({}) }
-    )
-      .then(function (r) { return r.ok ? r.json() : []; })
-      .then(function (rows) {
-        // newest first, above the hand-approved messages; walk backwards so
+    fetch(LIVE_URL + "?slug=" + encodeURIComponent(slug))
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (body) {
+        var rows = (body && body.items) || [];
+        // newest first, above the hand-added messages; walk backwards so
         // each prepend keeps that order
         for (var i = rows.length - 1; i >= 0; i--) renderItem(rows[i], true);
       })
@@ -326,43 +312,46 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    fetch(LIVE_URL + "/rest/v1/condolences", {
+    // text/plain keeps this a "simple" request: Apps Script cannot answer the
+    // CORS preflight that application/json would trigger. The script parses
+    // the body as JSON either way, and emails Sterling itself.
+    fetch(LIVE_URL, {
       method: "POST",
-      headers: liveHeaders({ "Content-Type": "application/json", Prefer: "return=minimal" }),
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         slug: slug,
+        person: person,
         name: name,
-        relationship: relationship || null,
-        email: email || null,
+        relationship: relationship,
+        email: email,
         message: message,
       }),
     })
       .then(function (r) {
-        if (r.ok) return;
+        if (!r.ok) throw new Error("http " + r.status);
         return r.json().then(
-          function (body) { throw new Error(String((body && body.message) || "http " + r.status)); },
-          function () { throw new Error("http " + r.status); }
+          function (body) {
+            if (!body || body.ok !== true) throw new Error(String((body && body.error) || "not saved"));
+          },
+          function () { throw new Error("unreadable response"); }
         );
       })
       .then(
         function () {
           renderItem({ name: name, relationship: relationship, message: message }, true);
-          // Sterling's copy. Its failure must not undo a message that is
-          // already on the page, so it is not waited on.
-          sendEmail().catch(function () {});
           done("Your message is now on this page, and Sterling will pass it to the family.");
         },
         function (err) {
           reset();
           var why = String(err && err.message);
-          // The database's spam checks: tell the visitor what to change
+          // The script's spam checks: tell the visitor what to change
           // rather than dumping them into their mail app.
-          if (/links are not allowed/.test(why)) {
+          if (/^links$/.test(why)) {
             if (note) note.textContent = "Please remove any web addresses from your message and try again.";
           } else if (/duplicate/.test(why)) {
             done("Your message is already on this page. Thank you.");
           } else if (/too many/.test(why)) {
-            if (note) note.textContent = "Several messages have just been posted from your connection. Please try again in a few minutes.";
+            if (note) note.textContent = "Many messages have just been posted on this page. Please try again in a few minutes.";
           } else if (/length/.test(why)) {
             if (note) note.textContent = "Please keep your name under 80 characters and your message under 2,000.";
           } else {

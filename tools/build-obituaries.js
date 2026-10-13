@@ -20,7 +20,7 @@ const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));
 
 /* Condolences added by hand (from email, a card, a phone call), keyed by slug.
-   Messages posted on the site itself live in Supabase and load in the browser
+   Messages posted on the site itself live in Sterling's Google Sheet and load in the browser
    - see js/main.js. Keys beginning with "_" are notes. */
 const condolences = JSON.parse(fs.readFileSync(path.join(root, "data/condolences.json"), "utf8"));
 
@@ -165,7 +165,8 @@ function summaryLine(p) {
 }
 
 /* The guestbook. Messages posted through the form go straight onto the page
-   (js/main.js loads and posts them live, and emails Sterling a copy); the
+   (js/main.js loads and posts them through the Google Sheet script in
+   condolences/Code.gs, which also emails Sterling); the
    hand-approved ones below are built in. A private link writes to the family
    through Sterling without going near the page. */
 function condolenceSection(p) {
@@ -651,7 +652,6 @@ let stamped = 0;
 const pages = [
   ...fs.readdirSync(root).filter((f) => f.endsWith(".html")),
   ...fs.readdirSync(path.join(root, "obituaries")).filter((f) => f.endsWith(".html")).map((f) => "obituaries/" + f),
-  "condolences/remove.html",
 ];
 for (const rel of pages) {
   const abs = path.join(root, rel);
