@@ -581,6 +581,20 @@ for (const p of people) {
   written++;
 }
 
+/* A page whose record is gone - removed in the upload portal, or renamed -
+   would otherwise stay online forever, reachable from Google and old links.
+   Only .html files directly inside obituaries/ are touched, and only those
+   with no record behind them. */
+{
+  const keep = new Set(people.map((p) => p.slug + ".html"));
+  for (const f of fs.readdirSync(path.join(root, "obituaries"))) {
+    if (f.endsWith(".html") && !keep.has(f)) {
+      fs.unlinkSync(path.join(root, "obituaries", f));
+      console.log(`Removed obituaries/${f}: no record in data/obituaries.json.`);
+    }
+  }
+}
+
 fs.writeFileSync(path.join(root, "livestreams.html"), servicesPage());
 fs.writeFileSync(path.join(root, "testimonials.html"), testimonialsPage());
 
@@ -629,7 +643,7 @@ function fingerprint(rel) {
 // The path always starts at images/, css/ or js/ - whatever precedes it
 // ("../", the site URL) is left untouched. It must end at a quote, pipe
 // (data-images lists), bracket or whitespace, so partial names never match.
-const ASSET = /\b((?:images\/[\w\-\/.]+?\.(?:jpe?g|png|webp|gif|svg))|css\/styles\.css|js\/[\w\-]+\.js)(?:\?v=[0-9a-f]{8})?(?=["'|)\s])/g;
+const ASSET = /\b((?:images\/[\w\-\/.]+?\.(?:jpe?g|png|webp|gif|svg))|css\/[\w\-]+\.css|js\/[\w\-]+\.js)(?:\?v=[0-9a-f]{8})?(?=["'|)\s])/g;
 const stamp = (text) =>
   text.replace(ASSET, (whole, rel) => {
     const v = fingerprint(rel);
@@ -652,6 +666,10 @@ let stamped = 0;
 const pages = [
   ...fs.readdirSync(root).filter((f) => f.endsWith(".html")),
   ...fs.readdirSync(path.join(root, "obituaries")).filter((f) => f.endsWith(".html")).map((f) => "obituaries/" + f),
+  // the upload portal, so Sheradan's phone never runs yesterday's portal script
+  ...(fs.existsSync(path.join(root, "portal"))
+    ? fs.readdirSync(path.join(root, "portal")).filter((f) => f.endsWith(".html")).map((f) => "portal/" + f)
+    : []),
 ];
 for (const rel of pages) {
   const abs = path.join(root, rel);
@@ -715,9 +733,41 @@ const ROOT_PAGES = [
   ["about.html", 0.7],
   ["contact.html", 0.7],
 ];
+/* lastmod = the day the page last really changed. It used to be the file's
+   mtime, but this build rewrites every page on every run, so the whole
+   sitemap claimed "changed today" each time - and on GitHub's build server,
+   where every file is freshly checked out, it would have produced a commit on
+   every single run. So: a page that differs from the last commit changed
+   today; otherwise, the date of the last commit that touched it. No git
+   (a plain folder copy) falls back to the old mtime behaviour. */
+const { execFileSync } = require("child_process");
+const today = new Date().toISOString().slice(0, 10);
+const git = (args) => {
+  try { return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); }
+  catch (e) { return null; }
+};
+const inGit = git(["rev-parse", "--is-inside-work-tree"]) === "true";
+// two git calls for the whole site rather than two per page
+const dirty = new Set(
+  inGit
+    ? (git(["status", "--porcelain", "--untracked-files=all"]) || "")
+        .split("\n")
+        .filter(Boolean)
+        .map((l) => l.slice(3).split(" -> ").pop().replace(/^"|"$/g, ""))
+    : []
+);
+const lastCommit = new Map();
+if (inGit) {
+  let day = null;
+  for (const line of (git(["log", "--format=>%cs", "--name-only", "--", "*.html"]) || "").split("\n")) {
+    if (line.startsWith(">")) day = line.slice(1);
+    else if (line && !lastCommit.has(line)) lastCommit.set(line, day);
+  }
+}
 const iso = (f) => {
+  if (inGit) return dirty.has(f) ? today : lastCommit.get(f) || today;
   try { return fs.statSync(path.join(root, f)).mtime.toISOString().slice(0, 10); }
-  catch (e) { return new Date().toISOString().slice(0, 10); }
+  catch (e) { return today; }
 };
 const urls = [
   ...ROOT_PAGES.map(([f, pri]) => ({ loc: `${SITE}/${f}`, mod: iso(f || "index.html"), pri })),
@@ -737,7 +787,8 @@ fs.writeFileSync(
 );
 fs.writeFileSync(
   path.join(root, "robots.txt"),
-  `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`
+  // the upload portal is useless without a key, but no reason to invite crawlers
+  `User-agent: *\nAllow: /\nDisallow: /portal/\n\nSitemap: ${SITE}/sitemap.xml\n`
 );
 console.log(`Sitemap: ${urls.length} URLs.`);
 

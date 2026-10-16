@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Obituary Portal | Sterling Funeral Services</title>
+<meta name="robots" content="noindex, nofollow" />
+<!-- The access key lives in this browser only and is sent nowhere but GitHub;
+     nothing else may load or be contacted from this page. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; base-uri 'none'; form-action 'none'" />
+<meta name="referrer" content="no-referrer" />
+<link rel="icon" type="image/png" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="stylesheet" href="../css/styles.css?v=88c251ff" />
+<link rel="stylesheet" href="../css/portal.css?v=10fe759d" />
+</head>
+<body class="pt-body">
+<header class="pt-header">
+<a class="pt-brand" href="../index.html"><img src="../images/brand/logo-horizontal.png?v=ff432793" alt="Sterling Funeral Services" /></a>
+<div class="pt-header-right">
+<span class="pt-title">Obituary portal</span>
+<button type="button" class="pt-link pt-signout" id="signout" hidden>Sign out of this device</button>
+</div>
+</header>
+
+<main class="pt-main">
+
+<!-- 1. connect this device -->
+<section id="view-connect" class="pt-view" hidden>
+<p class="eyebrow">Welcome</p>
+<h1 class="pt-h1">Connect this device</h1>
+<p class="pt-lede">The portal publishes straight to the Sterling website, so each phone or computer needs Sterling&rsquo;s access key once. Tech Nova sets this up for you. After that, this device stays connected.</p>
+<form id="connect-form" class="pt-card" novalidate>
+<div class="field"><label for="key">Access key</label><input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_&hellip;" required /></div>
+<button class="button wine" type="submit">Connect <span>&#8594;</span></button>
+<p class="pt-msg" id="connect-msg" role="alert"></p>
+</form>
+<p class="pt-small">Only connect phones and computers that you alone use. Never share the key in a message or email. If you see this screen without expecting it, the key has expired or been changed: call Tech Nova.</p>
+</section>
+
+<!-- 2. list of obituaries -->
+<section id="view-list" class="pt-view" hidden>
+<div class="pt-list-head">
+<div>
+<p class="eyebrow">Sterling obituaries</p>
+<h1 class="pt-h1">Obituaries on the website</h1>
+</div>
+<button type="button" class="button wine" id="add-new">Add an obituary <span>+</span></button>
+</div>
+<div class="field pt-search"><label for="search">Find a name</label><input id="search" type="search" autocomplete="off" placeholder="Start typing a name&hellip;" /></div>
+<p class="pt-msg" id="list-msg" role="status"></p>
+<div id="list" class="pt-list" aria-live="polite"></div>
+<aside class="pt-card pt-help">
+<h2 class="pt-h2">Something the portal doesn&rsquo;t do?</h2>
+<p>Changing wording on a page, publishing a condolence or a testimonial, or anything else: ask Claude, and it makes the change for you to approve.</p>
+<a class="button outline-dark" id="ask-claude" href="https://claude.ai/code?repositories=Technovabb%2Fsterling-funeral-services" target="_blank" rel="noopener">Ask Claude <span>&#8599;</span></a>
+</aside>
+</section>
+
+<!-- 3. add / edit -->
+<section id="view-edit" class="pt-view" hidden>
+<button type="button" class="pt-link pt-back" data-go="list">&#8592; All obituaries</button>
+<p class="eyebrow" id="edit-eyebrow">New obituary</p>
+<h1 class="pt-h1" id="edit-title">Add an obituary</h1>
+<p class="pt-msg pt-note" id="edit-note" hidden></p>
+
+<form id="edit-form" novalidate>
+<div class="pt-columns">
+<div class="pt-form-col">
+
+<fieldset class="pt-card">
+<legend>Photograph</legend>
+<p class="pt-small">A head-and-shoulders photo. Drag it to position the face and use the slider to zoom. Never upload an ID card, certificate or any other document.</p>
+<div class="pt-crop" id="crop" hidden>
+<canvas id="crop-canvas" width="320" height="400" aria-label="Photo crop area. Drag to move the photo."></canvas>
+<label class="pt-zoom" for="zoom">Zoom <input id="zoom" type="range" min="1" max="4" step="0.01" value="1" /></label>
+</div>
+<div class="pt-current" id="current-photo" hidden><img alt="" id="current-img" /><span>Current photo</span></div>
+<label class="button outline-dark pt-file">Choose a photo <span>&#8593;</span><input id="photo" type="file" accept="image/*" /></label>
+<button type="button" class="pt-link" id="photo-undo" hidden>Keep the current photo instead</button>
+</fieldset>
+
+<fieldset class="pt-card">
+<legend>The person</legend>
+<div class="field"><label for="f-name">Full name <em>required</em></label><input id="f-name" required autocomplete="off" placeholder="e.g. Graham Gordon Nathaniel Stanford" /></div>
+<div class="field"><label for="f-aka">Known as <span class="opt">(optional)</span></label><input id="f-aka" autocomplete="off" placeholder="e.g. Nee Zee" /></div>
+<div class="field-row">
+<div class="field"><label for="f-born">Date of birth <span class="opt">(optional)</span></label><input id="f-born" type="date" /></div>
+<div class="field"><label for="f-died">Date of passing <em>required</em></label><input id="f-died" type="date" required /></div>
+</div>
+<div class="field-row">
+<div class="field"><label for="f-age">Age</label><input id="f-age" type="number" min="0" max="125" inputmode="numeric" /><small class="pt-hint" id="age-hint"></small></div>
+<div class="field"><label for="f-occupation">Occupation <span class="opt">(optional)</span></label><input id="f-occupation" autocomplete="off" placeholder="e.g. Retired nurse, QEH" /></div>
+</div>
+<div class="field"><label for="f-address">Late of <span class="opt">(address)</span></label><input id="f-address" autocomplete="off" placeholder="e.g. 4th Avenue, Amity Lodge, Christ Church" /></div>
+<div class="field"><label for="f-summary">A line in their memory <span class="opt">(optional, shown at the top of the page)</span></label><input id="f-summary" autocomplete="off" /></div>
+</fieldset>
+
+<fieldset class="pt-card">
+<legend>The service</legend>
+<div class="field-row">
+<div class="field"><label for="f-svc-date">Service date <em>required</em></label><input id="f-svc-date" type="date" required /></div>
+<div class="field"><label for="f-svc-time">Time</label><input id="f-svc-time" type="time" /></div>
+</div>
+<p class="pt-small pt-asis" id="svc-asis" hidden></p>
+<div class="field"><label for="f-venue">Church or venue</label><input id="f-venue" autocomplete="off" placeholder="e.g. St. Stephen&rsquo;s Anglican Church, Black Rock, St. Michael" /></div>
+<div class="field"><label for="f-interment">Interment <span class="opt">(optional)</span></label><input id="f-interment" autocomplete="off" placeholder="e.g. Westbury Cemetery" /></div>
+<div class="field"><label for="f-notes">Viewing, flowers and other notes <span class="opt">(one per line)</span></label><textarea id="f-notes" rows="4" placeholder="e.g. Graham will repose for viewing at &hellip;"></textarea></div>
+</fieldset>
+
+<fieldset class="pt-card">
+<legend>Livestream</legend>
+<div class="field"><label for="f-ls-provider">Streamed by</label>
+<select id="f-ls-provider">
+<option value="">Not streamed</option>
+<option>KD34 Streaming Services</option>
+<option>Sharing Memories Forever</option>
+<option>Eternally Cherished</option>
+<option>The Funeral Company</option>
+<option value="other">Someone else&hellip;</option>
+</select></div>
+<div class="field" id="ls-label-field" hidden><label for="f-ls-label">Who streamed it</label><input id="f-ls-label" autocomplete="off" /></div>
+<div class="field" id="ls-url-field" hidden><label for="f-ls-url">Link to the stream or recording</label><input id="f-ls-url" type="url" inputmode="url" autocomplete="off" placeholder="https://&hellip;" /></div>
+<button type="button" class="pt-link" id="kd34-live" hidden>Use KD34&rsquo;s live page until the recording is up</button>
+<p class="pt-small" id="ls-tip" hidden>After the service, come back and swap in the recording&rsquo;s own link, so it can still be watched later.</p>
+</fieldset>
+
+<fieldset class="pt-card">
+<legend>Family and friends</legend>
+<div class="field"><label for="f-family">One relationship per line, as in the newspaper notice</label><textarea id="f-family" rows="8" placeholder="Cherished husband of Dolores Alleyne-Stanford&#10;Devoted father of Oral, Joan and Mark&#10;Brother of &hellip;"></textarea></div>
+</fieldset>
+
+<fieldset class="pt-card" id="note-card">
+<legend>Note for Tech Nova</legend>
+<div class="field"><label for="f-flag">Anything to check later <span class="opt">(never shown on the website)</span></label><textarea id="f-flag" rows="2"></textarea></div>
+</fieldset>
+
+</div>
+
+<div class="pt-preview-col">
+<div class="pt-sticky">
+<p class="eyebrow">Preview</p>
+<div class="obituary-grid pt-preview" id="preview"></div>
+<div class="pt-problems" id="problems" role="alert"></div>
+<button class="button wine pt-publish" type="submit" id="publish">Publish to the website <span>&#8599;</span></button>
+<button type="button" class="pt-link pt-danger" id="remove" hidden>Remove this obituary from the website</button>
+</div>
+</div>
+</div>
+</form>
+</section>
+
+<!-- 4. publishing progress -->
+<section id="view-done" class="pt-view" hidden>
+<p class="eyebrow" id="done-eyebrow">Publishing</p>
+<h1 class="pt-h1" id="done-title">Publishing&hellip;</h1>
+<ol class="pt-steps" id="steps">
+<li id="step-save"><span class="pt-dot"></span>Saving to the website&rsquo;s records</li>
+<li id="step-build"><span class="pt-dot"></span>Building the pages</li>
+<li id="step-live"><span class="pt-dot"></span>Live on sterlingfuneralservices.com</li>
+</ol>
+<p class="pt-msg" id="done-msg" role="status"></p>
+<div class="pt-done-actions">
+<a class="button wine" id="view-page" href="#" target="_blank" rel="noopener" hidden>View the page <span>&#8599;</span></a>
+<button type="button" class="button outline-dark" data-go="list">Back to all obituaries <span>&#8594;</span></button>
+</div>
+</section>
+
+<p class="pt-loading" id="loading" hidden>Loading&hellip;</p>
+</main>
+
+<dialog id="confirm" class="pt-dialog">
+<form method="dialog">
+<h2 class="pt-h2" id="confirm-title"></h2>
+<div id="confirm-body"></div>
+<div class="pt-dialog-actions">
+<button value="cancel" class="button outline-dark">Go back</button>
+<button value="ok" class="button wine" id="confirm-ok">Publish</button>
+</div>
+</form>
+</dialog>
+
+<script src="../js/portal.js?v=31c32282"></script>
+</body>
+</html>

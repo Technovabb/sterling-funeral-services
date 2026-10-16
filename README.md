@@ -84,3 +84,43 @@ Obituary portraits are cropped to a 4:5 head-and-shoulders frame, the shape of
 the tiles on the Obituaries page. A photo of another shape still works — it
 fills the tile, trimmed around the face — but a full-length or group shot
 should be cropped first so the face is roughly the size of the others.
+
+## Upload portal
+
+Sterling adds, edits and removes obituaries itself at
+**https://www.sterlingfuneralservices.com/portal/** (`portal/index.html`,
+`js/portal.js`, `css/portal.css`). The portal changes one record in
+`data/obituaries.json` plus the photo, in a single commit to `main`, through
+the GitHub API. It writes records exactly the way they are written by hand,
+computes every weekday itself, crops photos to 4:5, and re-applies its change
+to the latest data if someone else published at the same moment.
+
+**Access.** Each device needs a GitHub fine-grained personal access token,
+pasted into the portal once and kept in that browser only:
+
+1. Signed in to GitHub as **Technovabb** (the repository's owner — a token
+   made by a collaborator's own account cannot reach a repository owned by
+   another personal account): Settings → Developer settings → Personal access
+   tokens → **Fine-grained tokens** → Generate new token.
+2. Name it after the device ("Sheradan's phone"), expiry up to a year.
+   Repository access: **Only select repositories** → `sterling-funeral-services`.
+   Permissions → Repository permissions → **Contents: Read and write**
+   (Metadata: Read is added automatically). Nothing else.
+3. Open the portal on that device and paste the token in. To withdraw a
+   device, delete its token on GitHub; the portal then asks for a new one.
+
+## Automatic rebuilds
+
+`.github/workflows/rebuild.yml` runs the build on every push to `main`, every
+night at 00:15 Barbados time (so finished services leave "Upcoming funerals"
+on their own), and on demand from the Actions tab. It commits the rebuilt
+pages only when something changed. A failed run emails the repository owner.
+
+## Updating the site with Claude
+
+`CLAUDE.md` tells Claude how this site works and what must never be
+published. Sheradan can make changes by chatting at
+[claude.ai/code](https://claude.ai/code?repositories=Technovabb%2Fsterling-funeral-services)
+(or the Code tab of the Claude app): Claude makes the change on a branch and
+opens a pull request, and he merges it on GitHub. That needs a paid Claude plan
+and a GitHub account with write access to this repository.
