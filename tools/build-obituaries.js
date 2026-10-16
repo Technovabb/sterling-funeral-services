@@ -16,6 +16,14 @@ const path = require("path");
 // previews for shared obituaries show no photograph without this.
 const SITE = "https://www.sterlingfuneralservices.com";
 
+/* Every date the build decides is Barbados time, wherever it runs: Sheradan's
+   laptop, or GitHub's servers, which run on UTC. In UTC a 2pm service turned
+   "past" at 8pm Barbados time, and the sitemap disagreed with itself about
+   which day a commit fell on. */
+const BARBADOS = "America/Barbados";
+const dayIn = (d) => d.toLocaleDateString("en-CA", { timeZone: BARBADOS }); // en-CA = YYYY-MM-DD
+const TODAY = dayIn(new Date());
+
 const root = path.join(__dirname, "..");
 const people = JSON.parse(fs.readFileSync(path.join(root, "data/obituaries.json"), "utf8"));
 
@@ -317,7 +325,7 @@ function serviceDateISO(p) {
 }
 
 function servicesPage() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = TODAY;
   const dated = people.map((p) => ({ p, iso: serviceDateISO(p) }));
 
   const upcoming = dated
@@ -455,7 +463,7 @@ ${image}
    When nothing is upcoming the band is omitted entirely rather than rendered
    empty - a permanently empty "Upcoming funerals" heading reads as neglect. */
 function upcomingBlock() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = TODAY;
   const upcoming = people
     .map((p) => ({ p, iso: serviceDateISO(p) }))
     .filter((x) => x.iso && x.iso >= today)
@@ -741,7 +749,7 @@ const ROOT_PAGES = [
    today; otherwise, the date of the last commit that touched it. No git
    (a plain folder copy) falls back to the old mtime behaviour. */
 const { execFileSync } = require("child_process");
-const today = new Date().toISOString().slice(0, 10);
+const today = TODAY;
 const git = (args) => {
   try { return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim(); }
   catch (e) { return null; }
@@ -759,8 +767,9 @@ const dirty = new Set(
 const lastCommit = new Map();
 if (inGit) {
   let day = null;
-  for (const line of (git(["log", "--format=>%cs", "--name-only", "--", "*.html"]) || "").split("\n")) {
-    if (line.startsWith(">")) day = line.slice(1);
+  // %ct (a timestamp), not %cs: %cs is in the committer's own time zone
+  for (const line of (git(["log", "--format=>%ct", "--name-only", "--", "*.html"]) || "").split("\n")) {
+    if (line.startsWith(">")) day = dayIn(new Date(Number(line.slice(1)) * 1000));
     else if (line && !lastCommit.has(line)) lastCommit.set(line, day);
   }
 }
