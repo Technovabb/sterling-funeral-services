@@ -116,11 +116,13 @@ night at 00:15 Barbados time (so finished services leave "Upcoming funerals"
 on their own), and on demand from the Actions tab. It commits the rebuilt
 pages only when something changed. A failed run emails the repository owner.
 
-## Updating the site with Claude
+## Updating the site by chat (ChatGPT or Claude)
 
-`CLAUDE.md` tells Claude how this site works and what must never be
-published. Sheradan can make changes by chatting at
-[claude.ai/code](https://claude.ai/code?repositories=Technovabb%2Fsterling-funeral-services)
-(or the Code tab of the Claude app): Claude makes the change on a branch and
-opens a pull request, and he merges it on GitHub. That needs a paid Claude plan
-and a GitHub account with write access to this repository.
+`AGENTS.md` holds the rules for any AI assistant working on this site: how it
+is built, and what must never be published. ChatGPT's Codex reads it directly;
+Claude reads it through `CLAUDE.md`, which only imports it.
+
+Sheradan uses **ChatGPT Codex** (chatgpt.com/codex, or Codex in the ChatGPT
+app): a cloud environment for this repository, a task in plain words, then the
+pull request Codex opens is merged on GitHub. Codex in the cloud needs a ChatGPT
+Plus plan or higher and a GitHub account with write access to this repository.

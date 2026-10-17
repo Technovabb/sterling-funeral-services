@@ -1,0 +1,13 @@
+{
+  "name": "Sterling Obituary Portal",
+  "short_name": "Sterling Portal",
+  "description": "Add, edit and remove obituaries on sterlingfuneralservices.com.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f2ece4",
+  "theme_color": "#3a0f1a",
+  "icons": [
+    { "src": "../apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
