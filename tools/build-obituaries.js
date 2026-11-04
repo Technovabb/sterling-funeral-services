@@ -164,11 +164,14 @@ function splitName(name) {
   return { first: words[0], rest: words.slice(1).join(" ") };
 }
 
+// "Rumpy or Michael" is two nicknames, quoted separately as the Nation prints them.
+const quoteAka = (aka) => aka.split(" or ").map((n) => `“${n}”`).join(" or ");
+
 // The memorial page carries the address in its own line, so the pull-quote
 // leads with the alias instead of repeating it.
 function summaryLine(p) {
   if (p.summary) return p.summary;
-  if (p.aka) return `Affectionately known as “${p.aka}”.`;
+  if (p.aka) return `Affectionately known as ${quoteAka(p.aka)}.`;
   return "Remembered with love by family and friends.";
 }
 
@@ -422,7 +425,7 @@ ${footer("")}
 function blurb(p) {
   if (p.summary) return p.summary;
   const bits = [];
-  if (p.aka) bits.push(`Affectionately known as “${p.aka}”`);
+  if (p.aka) bits.push(`Affectionately known as ${quoteAka(p.aka)}`);
   if (p.address) bits.push(`of ${p.address.replace(/^Formerly of /i, "formerly of ")}`);
   const s = bits.join(" ");
   return s ? s.charAt(0).toUpperCase() + s.slice(1) + "." : "Remembered with love by family and friends.";
