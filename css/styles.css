@@ -387,3 +387,6 @@ footer{background:var(--wine-deep);color:#bfaeb1;padding:75px max(5vw,calc((100v
 .obituary-card-copy{flex:1;display:flex;flex-direction:column}
 .obituary-card-actions{margin-top:auto;padding-top:14px}
 @media(max-width:720px){.obituary-card-image{height:auto}}
+/* Photo panel between the two lists on the Funerals page */
+.services-feature{margin:0 0 90px}
+@media (max-width:900px){.services-feature{margin-bottom:60px}}

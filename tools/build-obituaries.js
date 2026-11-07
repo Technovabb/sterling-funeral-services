@@ -407,6 +407,15 @@ ${section(
   upcoming,
   "There are no services scheduled at the moment. Please contact Sterling if you are expecting details."
 )}
+<div class="split-feature services-feature">
+<div class="feature-image" style="background-image:url('images/gallery/bearer-casket.jpg');background-position:center 10%" role="img" aria-label="A Sterling Funeral Services bearer in morning dress and white gloves walking beside a casket"></div>
+<div class="split-copy">
+<p class="eyebrow">On the day</p>
+<h2>Carried with care,<br/><em>every step of the way.</em></h2>
+<p>From the church door to the final resting place, Sterling&rsquo;s team attends to every detail of the service, so that your family can be fully present in the moment.</p>
+<p>For help with arrangements, call us any time, 24 hours a day.</p>
+</div>
+</div>
 ${section(
   "Watch a service",
   "Services that have taken place and were streamed. Links are provided by the streaming service and may not stay available indefinitely.",
